@@ -1,4 +1,6 @@
-package util;
+package client;
+
+import util.Const;
 
 public class Board {
     final private int N = 8;
