@@ -94,7 +94,7 @@ public class GA {
             for(int i=1;i<N/2;i++)
                 Gene.flatCrossover(gene[i],gene[N-i],0.5);
             break;
-        }      
+        }
     }
 
     /**
