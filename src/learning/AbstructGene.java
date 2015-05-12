@@ -3,11 +3,11 @@ package learning;
 import util.*;
 
 public abstract class AbstructGene implements Sortable {
-    protected byte[] chromosome;
+    protected byte[] chromosome; // byte -> -127~128
     protected double fitness;
     
     public AbstructGene(int n) {
-        chromosome = new byte[n];
+        chromosome = new byte[n]; //
         fitness = 0.0;
     }
     
@@ -19,7 +19,7 @@ public abstract class AbstructGene implements Sortable {
     
     public abstract Object clone();
     
-    public abstract void calcFitness();
+    public abstract void calcFitness(Gene g);
     
     public double getFitness(){ return fitness; }
     

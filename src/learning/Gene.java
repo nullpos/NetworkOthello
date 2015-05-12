@@ -27,8 +27,10 @@ public class Gene extends AbstructGene {
     }
     
     @Override
-    public void calcFitness() {
-        // 自分以外の相手を選んでリーグ対戦
+    public void calcFitness(Gene g) {
+        // 自分以外の相手を選んでリーグ対戦(先攻後攻？)
         // 終了時、fitnessに(自分の石の数-相手の石の数)を加算
+        
+        
     }
 }
