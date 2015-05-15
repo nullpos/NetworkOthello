@@ -23,7 +23,7 @@ public class Main {
             
             ga.select(5);
             ga.crossover(1);
-            ga.mutate(n, m);
+            ga.mutate(2, 2);
         }
     }
 }

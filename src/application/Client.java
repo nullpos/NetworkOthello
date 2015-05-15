@@ -1,6 +1,9 @@
 package application;
 
 import javax.swing.*;
+
+import util.Const;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -22,32 +25,41 @@ public class Client extends JFrame implements MouseListener {
   public Client(Othello game, Player player) { //OthelloオブジェクトとPlayerオブジェクトを引数とする
       this.game = game; //引数のOthelloオブジェクトを渡す
       this.player = player; //引数のPlayerオブジェクトを渡す
-      int [] grids = game.getBoard(); //getGridメソッドにより局面情報を取得
-      int row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
+      int[][] board = game.getBoard(); //getGridメソッドにより局面情報を取得
+      int row = Const.BSIZE; //getRowメソッドによりオセロ盤の縦横マスの数を取得
+      
       //ウィンドウ設定
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
       setTitle("ネットワーク対戦型オセロゲーム");//ウィンドウのタイトル
       setSize(row * 45 + 10, row * 45 + 200);//ウィンドウのサイズを設定
       c = getContentPane();//フレームのペインを取得
+      
       //アイコン設定(画像ファイルをアイコンとして使う)
       whiteIcon = new ImageIcon("White.jpg");
       blackIcon = new ImageIcon("Black.jpg");
       boardIcon = new ImageIcon("GreenFrame.jpg");
       c.setLayout(null);//
+      
       //オセロ盤の生成
       buttonArray = new JButton[row * row];//ボタンの配列を作成
-      for(int i = 0 ; i < row * row ; i++){
-          if(grids[i].equals("black")){ buttonArray[i] = new JButton(blackIcon);}//盤面状態に応じたアイコンを設定
-          if(grids[i].equals("white")){ buttonArray[i] = new JButton(whiteIcon);}//盤面状態に応じたアイコンを設定
-          if(grids[i].equals("board")){ buttonArray[i] = new JButton(boardIcon);}//盤面状態に応じたアイコンを設定
-          c.add(buttonArray[i]);//ボタンの配列をペインに貼り付け
-          // ボタンを配置する
-          int x = (i % row) * 45;
-          int y = (int) (i / row) * 45;
-          buttonArray[i].setBounds(x, y, 45, 45);//ボタンの大きさと位置を設定する．
-          buttonArray[i].addMouseListener(this);//マウス操作を認識できるようにする
-          buttonArray[i].setActionCommand(Integer.toString(i));//ボタンを識別するための名前(番号)を付加する
+
+      for(int i=0; i<Const.BSIZE; i++) {
+          for(int j=0; j<Const.BSIZE; j++) {
+              if(board[i][j] == Const.BLACK){ buttonArray[i] = new JButton(blackIcon);}//盤面状態に応じたアイコンを設定
+              if(board[i][j] == Const.SPACE){ buttonArray[i] = new JButton(whiteIcon);}//盤面状態に応じたアイコンを設定
+              if(board[i][j] == Const.WHITE){ buttonArray[i] = new JButton(boardIcon);}//盤面状態に応じたアイコンを設定
+              c.add(buttonArray[i]);//ボタンの配列をペインに貼り付け
+              
+              // ボタンを配置する
+              int x = (j % row) * 45;
+              int y = i * 45;
+              buttonArray[i].setBounds(x, y, 45, 45);//ボタンの大きさと位置を設定する．
+              buttonArray[i].addMouseListener(this);//マウス操作を認識できるようにする
+              buttonArray[i].setActionCommand(Integer.toString(i));//ボタンを識別するための名前(番号)を付加する
+              
+          }
       }
+      
       //終了ボタン
       stop = new JButton("終了");//終了ボタンを作成
       c.add(stop); //終了ボタンをペインに貼り付け
@@ -150,11 +162,11 @@ public class Client extends JFrame implements MouseListener {
       if(myName.equals("")){
           myName = "No name";//名前がないときは，"No name"とする
       }
-      PlayerSample1 player = new PlayerSample1(); //プレイヤオブジェクトの用意(ログイン)
+      Player player = new Player(); //プレイヤオブジェクトの用意(ログイン)
       player.setName(myName); //名前を受付
-      OthelloSample1 game = new OthelloSample1(); //オセロオブジェクトを用意
+      Othello game = new Othello(); //オセロオブジェクトを用意
       Client oclient = new Client(game, player); //引数としてオセロオブジェクトを渡す
       oclient.setVisible(true);
-      oclient.connectServer("localhost", 10000);
+      //oclient.connectServer("localhost", 10000);
   }
 }

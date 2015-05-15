@@ -19,9 +19,17 @@ public class Othello {
     
     public String whichIsWinner() {
         int n=0;
+        int tmp;
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                n += board[i][j];
+                tmp = board[i][j];
+                if(tmp == Const.BLACK || tmp == Const.PBLACK) {
+                    n++;
+                } else if(tmp == Const.WHITE || tmp == Const.PWHITE) {
+                    n--;
+                } else {
+                    return "ERROR";
+                }
             }
         }
         
