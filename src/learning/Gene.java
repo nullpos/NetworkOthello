@@ -8,9 +8,9 @@ public class Gene extends AbstructGene {
      * putable cells
      * weight of putable cells
      * 00010203
-     * 08091011
-     * 16171819
-     * 24252627
+     * 01040506
+     * 02050708
+     * 03060809
      * 
      */
     

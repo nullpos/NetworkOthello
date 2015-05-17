@@ -158,7 +158,6 @@ public class Client extends JFrame implements MouseListener {
     }
     public void acceptOperation(String action){    // プレイヤの操作を受付
         if(game.applyAction(action)) {
-            game.setMove((player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE_STR : Const.BLACK_STR);
             play();
         }
     }
@@ -182,8 +181,7 @@ public class Client extends JFrame implements MouseListener {
         } else {
             // computer's turn
             if (!game.getMove().equals(player.getMove())) {
-                game.applyAction(computer.getNextAction(game.board));
-                game.setMove((player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE_STR : Const.BLACK_STR);
+                game.applyAction(computer.getNextAction(game));
             }
         }
     }

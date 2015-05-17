@@ -91,6 +91,7 @@ public class Othello {
         board[x][y] = move;
 
         flip(move, x, y, true);
+        this.move = (this.move.equals(Const.BLACK) ? Const.WHITE_STR : Const.BLACK_STR );
         return true;
     }
     
@@ -141,5 +142,13 @@ public class Othello {
                 }
             }
         }
+    }
+    
+    public Othello clone() {
+        Othello o = new Othello();
+        o.board = this.board;
+        o.move = this.move;
+        o.opt = this.opt;
+        return o;
     }
 }
