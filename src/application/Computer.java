@@ -9,7 +9,7 @@ public class Computer {
         level = n;
     }
     
-    public String getNextMove(int[][] board) {
+    public String getNextAction(int[][] board) {
         String next = "";
         
         int[][] nboard = search(board, Const.LEVEL_DEPTH[level]);
