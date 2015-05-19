@@ -67,7 +67,14 @@ public class Othello {
         this.move = move;
     }
     
+    // 返り値はtrueならば相手のターンに移る
     public boolean applyAction(String action) {
+        if(action.equals(Const.PASS_STR)) {
+            switchTurn();
+            checkPutable(this.getIntMove());
+            System.out.println(Const.PASS_STR);
+            return true;
+        }
         int iact = Integer.parseInt(action);
         boolean p; // TODO PBLACK
         if(iact > 63) {
@@ -99,7 +106,7 @@ public class Othello {
         this.move = (this.move.equals(Const.BLACK_STR)) ? Const.WHITE_STR : Const.BLACK_STR;
     }
     
-    public void flip(int move, int nx, int ny, boolean b) {
+    public boolean flip(int move, int nx, int ny, boolean b) {
         for(int i=-1; i<2; i++) {
             for(int j=-1; j<2; j++) {
                 if(i==0 && j==0) continue;
@@ -113,10 +120,11 @@ public class Othello {
                 y = ny + dy;
                 if(x<0 || x>7 || y<0 || y>7) continue;
                 while(board[x][y] == nmove) {
-                    if(x==0 || x==7 || y==0 || y==7) break;
                     x += dx;
                     y += dy;
+                    if(x<0 || x>7 || y<0 || y>7) break;
                 }
+                if(x<0 || x>7 || y<0 || y>7) continue;
                 
                 if(board[x][y] == Const.SPACE || board[x][y] == Const.PUTABLE) {
                     continue;
@@ -129,24 +137,28 @@ public class Othello {
                         board[x][y] = move;
                         x -= dx;
                         y -= dy;
+                        return true;
                     } else {
                         board[nx][ny] = Const.PUTABLE;
-                        return;
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
     
-    public void checkPutable(int move) {
+    public int checkPutable(int move) {
+        int p = 0;
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(board[i][j] == Const.PUTABLE || board[i][j] == Const.SPACE) {
                     board[i][j] = Const.SPACE;
-                    flip(move, i, j, false);
+                    if(flip(move, i, j, false)) p++;
                 }
             }
         }
+        return p;
     }
     
     public Othello clone() {

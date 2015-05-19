@@ -18,6 +18,8 @@ public class Const {
     public static final String DRAW_STR = "DRAW";
     public static final String BLACK_STR = "BLACK";
     public static final String WHITE_STR = "WHITE";
+    public static final String PASS_STR = "PASS";
+    
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
     public static final int[] LEVEL_DEPTH = {0, 5, 7, 11, 15};

@@ -10,7 +10,6 @@ public class Computer {
     }
     
     public String getNextAction(Othello game) {
-        String next = "";
         Othello nextGame = search(game);
 
         int[][] b = game.getBoard();
@@ -20,19 +19,19 @@ public class Computer {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(b[i][j] != Const.PUTABLE) continue;
                 if(nb[i][j] == Const.BLACK || nb[i][j] == Const.WHITE) {
-                    next = Integer.toString(i * Const.BSIZE + j);
-                    System.out.println("next:" + next);
+                    System.out.println("("+i+","+j+")");
+                    return Integer.toString(i * Const.BSIZE + j);
                 }
             }
         }
         
-        return next;
+        return Const.PASS_STR;
     }
     
     public Othello search(Othello game) {
         int[][] board = game.getBoard();
         int val = Integer.MIN_VALUE;
-        Othello nextGame = null;
+        Othello nextGame = game.clone();
 
         // おける場所を探す
         int[] px = new int[Const.BSIZE * Const.BSIZE];
@@ -47,6 +46,7 @@ public class Computer {
                 }
             }
         }
+        if(p==0) return game;
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
@@ -57,6 +57,7 @@ public class Computer {
                 nextGame = o;
             }
         }
+        
         return nextGame;
     }
     
@@ -65,7 +66,7 @@ public class Computer {
         
         boolean isMin = (depth % 2 == 0) ? true : false;
         int[][] board = game.getBoard();
-        int val = Integer.MIN_VALUE;
+        int val = (isMin) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 
         // おける場所を探す
         int[] px = new int[Const.BSIZE * Const.BSIZE];
@@ -80,6 +81,8 @@ public class Computer {
                 }
             }
         }
+        
+        if(p == 0) return eval(game);
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));

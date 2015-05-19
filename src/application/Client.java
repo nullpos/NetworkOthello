@@ -176,13 +176,19 @@ public class Client extends JFrame implements MouseListener {
     
     public void play() {
         if(game.isGameFinished()) {
-            
+            System.out.println(game.whichIsWinner() + " is winner.");
         } else {
             // computer's turn
             if (!game.getMove().equals(player.getMove())) {
                 game.applyAction(computer.getNextAction(game));
             }
+            // パスさせる
+            if(game.checkPutable(game.getIntMove()) == 0) {
+                game.applyAction(Const.PASS_STR);
+                play();
+            }
         }
+        
         this.updateDisp();
     }
 
@@ -191,11 +197,10 @@ public class Client extends JFrame implements MouseListener {
         JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．キャストを忘れずに
         String command = theButton.getActionCommand();//ボタンの名前を取り出す
         if(command.equals("Menu")) {
-            
+            // TODO
         } else {
             int cmdint = Integer.parseInt(command);
             cmdint = (e.getButton() == MouseEvent.BUTTON1) ? cmdint : cmdint + 64 ;
-            System.out.println(cmdint);//テスト用に標準出力
             //sendMessage(command); //テスト用にメッセージを送信
             this.acceptOperation(Integer.toString(cmdint));
         }
@@ -207,6 +212,7 @@ public class Client extends JFrame implements MouseListener {
 
     //テスト用のmain
     public static void main(String args[]){
+        // TODO デザインの処理
         //ログイン処理
         String myName = JOptionPane.showInputDialog(null,"Enter your name.","login",JOptionPane.QUESTION_MESSAGE);
         if(myName.equals("")){
@@ -227,9 +233,10 @@ public class Client extends JFrame implements MouseListener {
             oclient.playLocal(optwin.getComputerLevel());
         } else {
             //server
+            String ip = optwin.getServerAddress();
+            int port = Integer.parseInt(optwin.getServerPort());
+            oclient.connectServer(ip, port);
         }
-        
-        //oclient.connectServer("localhost", 10000);
     }
 }
 
@@ -290,11 +297,11 @@ class OptWindow extends JDialog implements MouseListener {
     }
 
     public String getServerAddress() {
-        return this.addrTextField.getText();
+        return this.addrTextField.getText().toLowerCase();
     }
     
     public String getServerPort() {
-        return this.portTextField.getText();
+        return this.portTextField.getText().toLowerCase();
     }
     
     public int getComputerLevel() {
