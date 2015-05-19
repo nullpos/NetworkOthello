@@ -146,7 +146,7 @@ public class Client extends JFrame implements MouseListener {
     }
     public void updateDisp(){   // 画面を更新する
         int[][] board = game.getBoard();
-        game.checkPutable((player.getMove().equals(Const.BLACK_STR) ? Const.BLACK : Const.WHITE));
+        game.checkPutable(game.getIntMove());
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(blackIcon);}//盤面状態に応じたアイコンを設定
@@ -175,7 +175,6 @@ public class Client extends JFrame implements MouseListener {
     }
     
     public void play() {
-        this.updateDisp();
         if(game.isGameFinished()) {
             
         } else {
@@ -184,6 +183,7 @@ public class Client extends JFrame implements MouseListener {
                 game.applyAction(computer.getNextAction(game));
             }
         }
+        this.updateDisp();
     }
 
     //マウスクリック時の処理

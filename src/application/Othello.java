@@ -3,9 +3,9 @@ package application;
 import util.Const;
 
 public class Othello {
-    String move = null;
-    int[][] board = new int[Const.BSIZE][Const.BSIZE];
-    int[] opt = new int[Const.OPTSIZE];
+    private String move = null;
+    private int[][] board = new int[Const.BSIZE][Const.BSIZE];
+    private int[] opt = new int[Const.OPTSIZE];
     
     public Othello() {
         for(int i=0; i<Const.BSIZE; i++) {
@@ -69,7 +69,7 @@ public class Othello {
     
     public boolean applyAction(String action) {
         int iact = Integer.parseInt(action);
-        boolean p;
+        boolean p; // TODO PBLACK
         if(iact > 63) {
             p = true;
             iact -= 64;
@@ -80,19 +80,23 @@ public class Othello {
         int x,y;
         x = iact / Const.BSIZE;
         y = iact % Const.BSIZE;
-        int move;
-        if(this.move.equals(Const.BLACK_STR)) {
-            move = Const.BLACK;
-        } else {
-            move = Const.WHITE;
-        }
+        int move = this.getIntMove();
         
-        if(board[x][y] != Const.PUTABLE) {System.err.println("ERROR"); return false;}
+        if(board[x][y] != Const.PUTABLE) {System.err.println("action: " + action + " error"); return false;}
         board[x][y] = move;
 
         flip(move, x, y, true);
-        this.move = (this.move.equals(Const.BLACK) ? Const.WHITE_STR : Const.BLACK_STR );
+        switchTurn();
+        checkPutable(this.getIntMove());
         return true;
+    }
+    
+    public int getIntMove() {
+        return (this.move.equals(Const.BLACK_STR)) ? Const.BLACK : Const.WHITE;
+    }
+    
+    public void switchTurn() {
+        this.move = (this.move.equals(Const.BLACK_STR)) ? Const.WHITE_STR : Const.BLACK_STR;
     }
     
     public void flip(int move, int nx, int ny, boolean b) {
@@ -109,6 +113,7 @@ public class Othello {
                 y = ny + dy;
                 if(x<0 || x>7 || y<0 || y>7) continue;
                 while(board[x][y] == nmove) {
+                    if(x==0 || x==7 || y==0 || y==7) break;
                     x += dx;
                     y += dy;
                 }
@@ -146,9 +151,26 @@ public class Othello {
     
     public Othello clone() {
         Othello o = new Othello();
-        o.board = this.board;
+        int[][] b = o.getBoard();
+        for(int i=0; i<Const.BSIZE; i++) {
+            for(int j=0; j<Const.BSIZE; j++) {
+                b[i][j] = this.board[i][j];
+            }
+        }
         o.move = this.move;
-        o.opt = this.opt;
+        for(int i=0; i<Const.OPTSIZE; i++) {
+            o.opt[i] = this.opt[i];
+        }
         return o;
+    }
+    
+    public void print() {
+        int[][] board = this.getBoard();
+        for(int i=0; i<Const.BSIZE; i++) {
+            for(int j=0; j<Const.BSIZE; j++) {
+                System.out.print(Const.PRINT_BOARD[board[i][j]]);
+            }
+            System.out.println();
+        }
     }
 }

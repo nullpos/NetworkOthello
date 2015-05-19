@@ -11,13 +11,17 @@ public class Computer {
     
     public String getNextAction(Othello game) {
         String next = "";
-        int[][] board = game.getBoard();
+        Othello nextGame = search(game);
+
+        int[][] b = game.getBoard();
+        int[][] nb = nextGame.getBoard();
         
-        int[][] nboard = search(game, Const.LEVEL_DEPTH[level]);
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(nboard[i][j] - board[i][j] != 0) {
-                    
+                if(b[i][j] != Const.PUTABLE) continue;
+                if(nb[i][j] == Const.BLACK || nb[i][j] == Const.WHITE) {
+                    next = Integer.toString(i * Const.BSIZE + j);
+                    System.out.println("next:" + next);
                 }
             }
         }
@@ -25,39 +29,78 @@ public class Computer {
         return next;
     }
     
-    public int[][] search(Othello game, int depth) {
-        int move = Const.WHITE; // TODO
-        boolean isMini = (depth % 2 == 0) ? false : true;
-        
-        game.checkPutable(move);
+    public Othello search(Othello game) {
         int[][] board = game.getBoard();
+        int val = Integer.MIN_VALUE;
+        Othello nextGame = null;
 
+        // おける場所を探す
         int[] px = new int[Const.BSIZE * Const.BSIZE];
         int[] py = new int[Const.BSIZE * Const.BSIZE];
         int p = 0;
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(board[i][j] == Const.PUTABLE) {
-                    px[i*j] = i;
-                    py[i*j] = j;
+                    px[p] = i;
+                    py[p] = j;
                     p++;
                 }
             }
         }
-        
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
-            o.applyAction(Integer.toString(px[i] * py[i]));
-            int value = eval(game);
-            //TODO
+            o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
+            int v = minMax(o.clone(), Const.LEVEL_DEPTH[level]);
+            
+            if(v > val) {
+                val = v;
+                nextGame = o;
+            }
         }
+        return nextGame;
+    }
+    
+    public int minMax(Othello game, int depth) {
+        if(depth == 0) return eval(game);
         
-        return board;
+        boolean isMin = (depth % 2 == 0) ? true : false;
+        int[][] board = game.getBoard();
+        int val = Integer.MIN_VALUE;
+
+        // おける場所を探す
+        int[] px = new int[Const.BSIZE * Const.BSIZE];
+        int[] py = new int[Const.BSIZE * Const.BSIZE];
+        int p = 0;
+        for(int i=0; i<Const.BSIZE; i++) {
+            for(int j=0; j<Const.BSIZE; j++) {
+                if(board[i][j] == Const.PUTABLE) {
+                    px[p] = i;
+                    py[p] = j;
+                    p++;
+                }
+            }
+        }
+        for (int i = 0; i < p; i++) {
+            Othello o = game.clone();
+            o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
+            int v = minMax(o.clone(), depth-1);
+            
+            if(isMin) {
+                if(v < val) {
+                    val = v;
+                }
+            } else {
+                if(v > val) {
+                    val = v;
+                }
+            }
+        }
+        return val;
     }
     
     public int eval(Othello game) {
-        byte[] g = {1,2,3,4,5,6,7,8,9,10};
-        int move = (game.getMove().equals(Const.BLACK)) ? Const.BLACK : Const.WHITE;
+        byte[] g = {1,2,3,4,5,6,7,8,9,10}; // TODO
+        int move = game.getIntMove();
         int[][] board = game.getBoard();
         int value = 0;
         
