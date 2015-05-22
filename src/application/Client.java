@@ -178,7 +178,7 @@ public class Client extends JFrame implements MouseListener {
         if(game.isGameFinished()) {
             System.out.println(game.whichIsWinner() + " is winner.");
         } else {
-            // computer's turn
+            // computer's turn TODO Server
             if (!game.getMove().equals(player.getMove())) {
                 game.applyAction(computer.getNextAction(game));
             }

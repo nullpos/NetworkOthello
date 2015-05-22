@@ -34,6 +34,24 @@ public class Const {
         {0, 1, 2, 3, 3, 2, 1, 0}
     };
 
+    private static final int $ = Const.SPACE;
+    private static final int b = Const.BLACK;
+    private static final int w = Const.WHITE;
+    private static final int B = Const.PBLACK;
+    private static final int W = Const.PWHITE;
+    private static final int O = Const.PUTABLE;
+    
+    public static final int[][] INIT_BOARD = {
+        {$, $, $, $, $, $, $, $},
+        {$, $, $, $, $, $, $, $},
+        {$, $, $, $, $, $, $, $},
+        {$, $, $, b, w, $, $, $},
+        {$, $, $, w, b, $, $, $},
+        {$, $, $, $, $, $, $, $},
+        {$, $, $, $, $, $, $, $},
+        {$, $, $, $, $, $, $, $}
+    };
+
     public static final int OFF = 0;
     public static final int ON = 1;
 }

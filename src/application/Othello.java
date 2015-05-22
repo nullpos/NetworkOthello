@@ -10,9 +10,7 @@ public class Othello {
     public Othello() {
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if((i==3 && j==4) || (i==4 && j==3)) { board[i][j] = Const.WHITE; continue;}
-                if((i==3 && j==3) || (i==4 && j==4)) { board[i][j] = Const.BLACK; continue;}
-                board[i][j] = Const.SPACE;
+                board[i][j] = Const.INIT_BOARD[i][j];
             }
         }
     }
@@ -45,10 +43,27 @@ public class Othello {
     }
     
     public boolean isGameFinished() {
+        int c = Const.SPACE;
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.SPACE) {
+                int tmp = board[i][j];
+                if(tmp == Const.SPACE || tmp == Const.PUTABLE) {
+                    // there are some space cells
                     return false;
+                } else if(tmp == Const.BLACK || tmp == Const.PBLACK) {
+                    if(c == Const.SPACE) {
+                        c = Const.BLACK;
+                    } else if(c == Const.WHITE) {
+                        // all cells are not same color
+                        return false;
+                    }
+                } else if(tmp == Const.WHITE || tmp == Const.PWHITE) {
+                    if(c == Const.SPACE) {
+                        c = Const.BLACK;
+                    } else if(c == Const.BLACK) {
+                        // all cells are not same color
+                        return false;
+                    }
                 }
             }
         }
@@ -107,6 +122,7 @@ public class Othello {
     }
     
     public boolean flip(int move, int nx, int ny, boolean b) {
+        boolean flag = false;
         for(int i=-1; i<2; i++) {
             for(int j=-1; j<2; j++) {
                 if(i==0 && j==0) continue;
@@ -137,7 +153,7 @@ public class Othello {
                         board[x][y] = move;
                         x -= dx;
                         y -= dy;
-                        return true;
+                        flag = true;
                     } else {
                         board[nx][ny] = Const.PUTABLE;
                         return true;
@@ -145,7 +161,7 @@ public class Othello {
                 }
             }
         }
-        return false;
+        return flag;
     }
     
     public int checkPutable(int move) {
