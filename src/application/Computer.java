@@ -46,7 +46,7 @@ public class Computer {
                 }
             }
         }
-        if(p==0) return game;
+        if(p == 0) return game;
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));

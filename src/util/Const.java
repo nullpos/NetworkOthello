@@ -22,7 +22,7 @@ public class Const {
     
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
-    public static final int[] LEVEL_DEPTH = {0, 5, 7, 11, 15};
+    public static final int[] LEVEL_DEPTH = {1, 2, 3, 4, 5};
     public static final int[][] WEIGHT = {
         {0, 1, 2, 3, 3, 2, 1, 0},
         {1, 4, 5, 6, 6, 5, 4, 1},

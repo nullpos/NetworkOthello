@@ -160,7 +160,10 @@ public class Client extends JFrame implements MouseListener {
         this.wdisp.setTurn((game.getIntMove() == Const.WHITE));
     }
     public void acceptOperation(String action){    // プレイヤの操作を受付
-        if(game.applyAction(action)) {
+        if(!game.getMove().equals(player.getMove())) {
+            System.out.println("not your turn");
+            return;
+        } else if(game.applyAction(action)) {
             play();
         }
     }
@@ -179,7 +182,20 @@ public class Client extends JFrame implements MouseListener {
     
     public void play() {
         if(game.isGameFinished()) {
+            String winner = game.whichIsWinner();
             System.out.println(game.whichIsWinner() + " is winner.");
+            this.updateDisp();
+            if(winner.equals(Const.BLACK_STR)) {
+                this.bdisp.setTurn(true);
+                this.wdisp.setTurn(false);
+            } else if(winner.equals(Const.WHITE_STR)) {
+                this.bdisp.setTurn(false);
+                this.wdisp.setTurn(true);
+            } else {
+                this.bdisp.setTurn(false);
+                this.wdisp.setTurn(false);
+            }
+            return;
         } else {
             // computer's turn TODO Server
             if (!game.getMove().equals(player.getMove())) {

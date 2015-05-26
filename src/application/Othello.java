@@ -25,8 +25,6 @@ public class Othello {
                     n++;
                 } else if(tmp == Const.WHITE || tmp == Const.PWHITE) {
                     n--;
-                } else {
-                    return "ERROR";
                 }
             }
         }
@@ -43,31 +41,14 @@ public class Othello {
     }
     
     public boolean isGameFinished() {
-        int c = Const.SPACE;
-        for(int i=0; i<Const.BSIZE; i++) {
-            for(int j=0; j<Const.BSIZE; j++) {
-                int tmp = board[i][j];
-                if(tmp == Const.SPACE || tmp == Const.PUTABLE) {
-                    // there are some space cells
-                    return false;
-                } else if(tmp == Const.BLACK || tmp == Const.PBLACK) {
-                    if(c == Const.SPACE) {
-                        c = Const.BLACK;
-                    } else if(c == Const.WHITE) {
-                        // all cells are not same color
-                        return false;
-                    }
-                } else if(tmp == Const.WHITE || tmp == Const.PWHITE) {
-                    if(c == Const.SPACE) {
-                        c = Const.BLACK;
-                    } else if(c == Const.BLACK) {
-                        // all cells are not same color
-                        return false;
-                    }
-                }
-            }
+        Othello tmp = this.clone();
+        // 両者ともに置く場所がない
+        if(tmp.checkPutable(Const.BLACK) == 0 &&
+                tmp.checkPutable(Const.WHITE) == 0) {
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
     
     public String getMove() {
@@ -90,6 +71,7 @@ public class Othello {
             System.out.println(this.getMove()+" "+Const.PASS_STR);
             return true;
         }
+        
         int iact = Integer.parseInt(action);
         boolean p; // TODO PBLACK
         if(iact > 63) {
