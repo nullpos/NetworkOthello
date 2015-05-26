@@ -89,10 +89,8 @@ public class Othello {
         if(board[x][y] != Const.PUTABLE) {System.err.println("action: " + action + " error"); return false;}
         if(p) {
             board[x][y] = (move == Const.BLACK) ? Const.PBLACK: Const.PWHITE;
-            System.out.println("set "+this.getMove());
         } else {
             board[x][y] = move;
-            System.out.println("set "+this.getMove());
         }
 
         flip(move, x, y, true);

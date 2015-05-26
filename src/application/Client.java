@@ -16,11 +16,9 @@ import java.util.regex.Pattern;
 import java.io.*;
 
 public class Client extends JFrame implements MouseListener {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private JButton[][] buttonArray = new JButton[Const.BSIZE][Const.BSIZE];//オセロ盤用のボタン配列
+    private JButton menuBtn;
     private Container c; // コンテナ
     private ImageIcon blackIcon, whiteIcon, boardIcon, putableIcon, arrowIcon; //アイコン
     private PrintWriter out;//データ送信用オブジェクト
@@ -29,8 +27,9 @@ public class Client extends JFrame implements MouseListener {
     private Player player; //Playerオブジェクト
     private JPlayerDisp bdisp;
     private JPlayerDisp wdisp;
-    private int[] opt = {0, 0};
+    private int[] opt = {Const.OFF, Const.OFF};
     private Computer computer = null;
+    private OptWindow optwin;
 
     /*
      *  コンストラクタ
@@ -80,6 +79,15 @@ public class Client extends JFrame implements MouseListener {
             }
         }
 
+        // メニューボタン
+        menuBtn = new JButton("Menu");
+        menuBtn.setActionCommand("Menu");
+        menuBtn.setContentAreaFilled(false);
+        menuBtn.setBounds(20, 20, 140, 70);
+        menuBtn.addMouseListener(this);
+        c.add(menuBtn);
+        
+        
         // 手番情報などのあたり
         bdisp = new JPlayerDisp("", blackIcon.getImage(), arrowIcon.getImage());
         wdisp = new JPlayerDisp("", whiteIcon.getImage(), arrowIcon.getImage());
@@ -187,17 +195,19 @@ public class Client extends JFrame implements MouseListener {
         game.checkPutable(game.getIntMove());
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(blackIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(whiteIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(boardIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.PUTABLE){ buttonArray[i][j].setIcon(putableIcon);}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(blackIcon); continue;}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(whiteIcon); continue;}
+                if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(boardIcon); continue;}
+                if(board[i][j] == Const.PUTABLE && opt[1] == Const.ON) {
+                    buttonArray[i][j].setIcon(putableIcon); continue;
+                } else {
+                    buttonArray[i][j].setIcon(boardIcon); continue;
+                }
             }
         }
 
-        int b = game.getScore(Const.BLACK);
-        int w = game.getScore(Const.WHITE);
-        this.bdisp.update(b);
-        this.wdisp.update(w);
+        this.bdisp.update(game.getScore(Const.BLACK));
+        this.wdisp.update(game.getScore(Const.WHITE));
         this.bdisp.setTurn((game.getIntMove() == Const.BLACK));
         this.wdisp.setTurn((game.getIntMove() == Const.WHITE));
     }
@@ -206,13 +216,19 @@ public class Client extends JFrame implements MouseListener {
             System.out.println("not your turn");
             return;
         } else if(game.applyAction(action)) {
-            sendMessage(action);
+            if(computer == null ) sendMessage(action);
             play();
         }
     }
-    
+
     public void setOption(int[] opt) {
-        this.opt = opt;
+        for(int i=0; i<opt.length; i++) {
+            this.opt[i] = opt[i];
+        }
+    }
+
+    public int[] getOption() {
+        return opt;
     }
     
     public void playLocal(int level) {
@@ -222,9 +238,9 @@ public class Client extends JFrame implements MouseListener {
         
         if(this.player.getMove().equals(Const.BLACK_STR)) {
             bdisp.setText(player.getName());
-            wdisp.setText("Computer Level "+level+1);
+            wdisp.setText("Computer Level "+(level+1));
         } else {
-            bdisp.setText("Computer Level "+level+1);
+            bdisp.setText("Computer Level "+(level+1));
             wdisp.setText(player.getName());
         }
         this.updateDisp();
@@ -275,7 +291,12 @@ public class Client extends JFrame implements MouseListener {
         JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．キャストを忘れずに
         String command = theButton.getActionCommand();//ボタンの名前を取り出す
         if(command.equals("Menu")) {
-            // TODO
+            if(optwin == null) {
+                optwin = new OptWindow(this, ModalityType.MODELESS);
+                optwin.setMode(1);
+                optwin.setOption(this.getOption());
+            }
+            optwin.setVisible(true);
         } else {
             int cmdint = Integer.parseInt(command);
             cmdint = (e.getButton() == MouseEvent.BUTTON1) ? cmdint : cmdint + 64 ;
@@ -319,6 +340,7 @@ public class Client extends JFrame implements MouseListener {
 
 class OptWindow extends JDialog implements MouseListener {
     private static final long serialVersionUID = 1L;
+    private Client client;
     private Container c; // コンテナ
     private JRadioButton serverRadioButton;
     private JLabelTextField addrTextField;
@@ -330,8 +352,9 @@ class OptWindow extends JDialog implements MouseListener {
     private JButton okButton;
     private ButtonGroup bGroup;
     
-    public OptWindow(JFrame mainFrame, ModalityType mt) {
-        super(mainFrame, mt);
+    public OptWindow(Client client, ModalityType mt) {
+        super(client, mt);
+        this.client = client;
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//ウィンドウを閉じる場合の処理
         setTitle("Game Settings");//ウィンドウのタイトル
@@ -363,13 +386,30 @@ class OptWindow extends JDialog implements MouseListener {
         
         //opt
         immoveCheckBox = new JCheckBox("不動の石を用いて対戦を行う");
+        immoveCheckBox.setSelected(true);
         c.add(immoveCheckBox);
         showCheckBox = new JCheckBox("石を置ける場所を表示する");
+        showCheckBox.setSelected(true);
         c.add(showCheckBox);
+        showCheckBox.addMouseListener(this);
         
         okButton = new JButton("OK");
         c.add(okButton);
         okButton.addMouseListener(this);
+    }
+
+    public void setOption(int[] option) {
+        if(option[0] == Const.ON) immoveCheckBox.setSelected(true);
+        if(option[1] == Const.ON) showCheckBox.setSelected(true);
+        
+    }
+
+    public void setMode(int i) {
+        if(i == 1) {
+            serverRadioButton.setEnabled(false);
+            localRadioButton.setEnabled(false);
+            immoveCheckBox.setEnabled(false);
+        }
     }
 
     public String getServerAddress() {
@@ -425,6 +465,11 @@ class OptWindow extends JDialog implements MouseListener {
             } else {
                 //local
                 this.setVisible(false);
+            }
+        } else if(e.getSource() == this.showCheckBox) {
+            this.client.setOption(this.getOption());
+            if(!serverRadioButton.isEnabled()) {
+                this.client.updateDisp();
             }
         }
     }
