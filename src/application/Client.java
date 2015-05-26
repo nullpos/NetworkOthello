@@ -39,7 +39,7 @@ public class Client extends JFrame implements MouseListener {
         this.player = player; //引数のPlayerオブジェクトを渡す
         int[][] board = game.getBoard(); //getGridメソッドにより局面情報を取得
         int row = Const.BSIZE; //getRowメソッドによりオセロ盤の縦横マスの数を取得
-        Image bgimg = (new ImageIcon("bg.jpg")).getImage();
+        Image bgimg = (new ImageIcon("resources/bg.jpg")).getImage();
         ImagePanel ip= new ImagePanel();
         ip.setImage(bgimg);
         
@@ -53,11 +53,11 @@ public class Client extends JFrame implements MouseListener {
         c = ip;//フレームのペインを取得
         
         //アイコン設定(画像ファイルをアイコンとして使う)
-        whiteIcon = new ImageIcon("White.jpg");
-        blackIcon = new ImageIcon("Black.jpg");
-        boardIcon = new ImageIcon("GreenFrame.jpg");
-        putableIcon = new ImageIcon("Putable.jpg");
-        arrowIcon = new ImageIcon("Arrow.png");
+        whiteIcon = new ImageIcon("resources/White.jpg");
+        blackIcon = new ImageIcon("resources/Black.jpg");
+        boardIcon = new ImageIcon("resources/GreenFrame.jpg");
+        putableIcon = new ImageIcon("resources/Putable.jpg");
+        arrowIcon = new ImageIcon("resources/Arrow.png");
         c.setLayout(null);//
 
         //オセロ盤の生成
