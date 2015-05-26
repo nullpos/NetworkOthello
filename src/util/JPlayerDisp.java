@@ -2,7 +2,6 @@ package util;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;

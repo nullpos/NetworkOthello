@@ -159,7 +159,7 @@ public class Client extends JFrame implements MouseListener {
         
         // 操作情報
         try {
-            int action = Integer.parseInt(msg);
+            Integer.parseInt(msg);
             game.applyAction(msg);
             play();
         } catch (NumberFormatException e) {
