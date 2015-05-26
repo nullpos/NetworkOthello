@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -16,20 +17,20 @@ public class JPlayerDisp extends JPanel {
     private JLabel scoreLabel;
     
     public JPlayerDisp(String name, Image img, Image arrowImg) {
+        int tate = 45;
         this.canvas = new OCanvas(img, arrowImg);
         this.nameLabel = new JLabel(name);
-        this.nameLabel.setSize(300, 45);
+        this.nameLabel.setSize(300, tate);
         this.nameLabel.setFont(new Font("Arial", Font.PLAIN, 30));
         this.scoreLabel = new JLabel();
-        this.scoreLabel.setSize(120, 45);
+        this.scoreLabel.setSize(100, tate);
         this.scoreLabel.setFont(new Font("Arial", Font.PLAIN, 30));
         
-        this.setSize(500, 45);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new BorderLayout());
         
-        this.add(canvas);
-        this.add(nameLabel);
-        this.add(scoreLabel);
+        this.add(canvas, BorderLayout.WEST);
+        this.add(nameLabel, BorderLayout.CENTER);
+        this.add(scoreLabel, BorderLayout.EAST);
     }
     
     public void setTurn(boolean b) {
@@ -37,7 +38,7 @@ public class JPlayerDisp extends JPanel {
     }
     
     public void update(int score) {
-        scoreLabel.setText(Integer.toString(score));
+        scoreLabel.setText(Integer.toString(score) + " points.");
         canvas.repaint();
     }
 }
@@ -52,7 +53,7 @@ class OCanvas extends Canvas {
         this.img = img;
         this.arrowImg = arrowImg;
         turn = true;
-        this.setSize(80, 45);
+        this.setSize(120, 40);
     }
 
     public void setTurn(boolean b) {

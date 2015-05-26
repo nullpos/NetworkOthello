@@ -3,6 +3,8 @@ package application;
 import javax.swing.*;
 
 import util.Const;
+import util.ImagePanel;
+
 import util.JLabelTextField;
 import util.JPlayerDisp;
 
@@ -32,13 +34,18 @@ public class Client extends JFrame implements MouseListener {
         this.player = player; //引数のPlayerオブジェクトを渡す
         int[][] board = game.getBoard(); //getGridメソッドにより局面情報を取得
         int row = Const.BSIZE; //getRowメソッドによりオセロ盤の縦横マスの数を取得
-
+        Image bgimg = (new ImageIcon("bg.jpg")).getImage();
+        ImagePanel ip= new ImagePanel();
+        ip.setImage(bgimg);
+        
         //ウィンドウ設定
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
         setTitle("Othello...");//ウィンドウのタイトル
         setSize(700, 700);//ウィンドウのサイズを設定
         setResizable(false);
-        c = getContentPane();//フレームのペインを取得
+        this.add(ip);
+        
+        c = ip;//フレームのペインを取得
         
         //アイコン設定(画像ファイルをアイコンとして使う)
         whiteIcon = new ImageIcon("White.jpg");
@@ -70,10 +77,10 @@ public class Client extends JFrame implements MouseListener {
         // 手番情報などのあたり
         bdisp = new JPlayerDisp("black", blackIcon.getImage(), arrowIcon.getImage());
         wdisp = new JPlayerDisp("white", whiteIcon.getImage(), arrowIcon.getImage());
-        bdisp.setBounds(100, 500, 500, 45);
-        wdisp.setBounds(100, 575, 500, 45);
-        bdisp.update(300);
-        wdisp.update(300);
+        bdisp.setBounds(100, 500, 500, 40);
+        wdisp.setBounds(100, 575, 500, 40);
+        bdisp.update(2);
+        wdisp.update(2);
         c.add(bdisp);
         c.add(wdisp);
     }
