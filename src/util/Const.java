@@ -40,7 +40,7 @@ public class Const {
     private static final int B = Const.PBLACK;
     private static final int W = Const.PWHITE;
     private static final int O = Const.PUTABLE;
-    
+
     public static final int[][] INIT_BOARD = {
         {$, $, $, $, $, $, $, $},
         {$, $, $, $, $, $, $, $},
@@ -50,6 +50,16 @@ public class Const {
         {$, $, $, $, $, $, $, $},
         {$, $, $, $, $, $, $, $},
         {$, $, $, $, $, $, $, $}
+    };
+    public static final int[][] INIT_BOARD2 = {
+        {w, w, w, b, w, $, b, w},
+        {b, w, b, b, b, b, b, w},
+        {b, w, w, b, w, b, w, w},
+        {b, w, b, b, w, w, w, w},
+        {b, w, b, b, w, b, w, $},
+        {b, w, b, w, b, w, w, w},
+        {b, b, w, b, b, b, w, w},
+        {b, b, b, b, b, w, w, w}
     };
 
     public static final int OFF = 0;

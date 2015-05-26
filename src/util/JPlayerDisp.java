@@ -37,6 +37,10 @@ public class JPlayerDisp extends JPanel {
         this.canvas.setTurn(b);
     }
     
+    public void setText(String text) {
+        this.nameLabel.setText(text);
+    }
+    
     public void update(int score) {
         scoreLabel.setText(Integer.toString(score) + " points.");
         canvas.repaint();

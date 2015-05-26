@@ -16,6 +16,10 @@ import java.util.regex.Pattern;
 import java.io.*;
 
 public class Client extends JFrame implements MouseListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private JButton[][] buttonArray = new JButton[Const.BSIZE][Const.BSIZE];//オセロ盤用のボタン配列
     private Container c; // コンテナ
     private ImageIcon blackIcon, whiteIcon, boardIcon, putableIcon, arrowIcon; //アイコン
@@ -26,9 +30,11 @@ public class Client extends JFrame implements MouseListener {
     private JPlayerDisp bdisp;
     private JPlayerDisp wdisp;
     private int[] opt = {0, 0};
-    private Computer computer;
+    private Computer computer = null;
 
-    // コンストラクタ
+    /*
+     *  コンストラクタ
+     */
     public Client(Othello game, Player player) { //OthelloオブジェクトとPlayerオブジェクトを引数とする
         this.game = game; //引数のOthelloオブジェクトを渡す
         this.player = player; //引数のPlayerオブジェクトを渡す
@@ -75,17 +81,19 @@ public class Client extends JFrame implements MouseListener {
         }
 
         // 手番情報などのあたり
-        bdisp = new JPlayerDisp("black", blackIcon.getImage(), arrowIcon.getImage());
-        wdisp = new JPlayerDisp("white", whiteIcon.getImage(), arrowIcon.getImage());
+        bdisp = new JPlayerDisp("", blackIcon.getImage(), arrowIcon.getImage());
+        wdisp = new JPlayerDisp("", whiteIcon.getImage(), arrowIcon.getImage());
         bdisp.setBounds(100, 500, 500, 40);
         wdisp.setBounds(100, 575, 500, 40);
-        bdisp.update(2);
-        wdisp.update(2);
+        bdisp.update(0);
+        wdisp.update(0);
         c.add(bdisp);
         c.add(wdisp);
     }
 
-    // メソッド
+    /*
+     *  サーバー関連のメソッド
+     */
     public void connectServer(String ipAddress, int port){  // サーバに接続
         Socket socket = null;
         try {
@@ -93,6 +101,7 @@ public class Client extends JFrame implements MouseListener {
             out = new PrintWriter(socket.getOutputStream(), true); //データ送信用オブジェクトの用意
             receiver = new Receiver(socket); //受信用オブジェクトの準備
             receiver.start();//受信用オブジェクト(スレッド)起動
+            System.out.println("connect success");
         } catch (UnknownHostException e) {
             System.err.println("ホストのIPアドレスが判定できません: " + e);
             System.exit(-1);
@@ -105,7 +114,7 @@ public class Client extends JFrame implements MouseListener {
     public void sendMessage(String msg){    // サーバに操作情報を送信
         out.println(msg);//送信データをバッファに書き出す
         out.flush();//送信データを送る
-        System.out.println("サーバにメッセージ " + msg + " を送信しました"); //テスト標準出力
+        System.out.println("Send: " + msg); //テスト標準出力
     }
 
     // データ受信用スレッド(内部クラス)
@@ -138,8 +147,41 @@ public class Client extends JFrame implements MouseListener {
     }
 
     public void receiveMessage(String msg){ // メッセージの受信
-        System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
+        System.out.println("Receive: " + msg); //テスト用標準出力
+        
+        // 操作情報
+        try {
+            int action = Integer.parseInt(msg);
+            game.applyAction(msg);
+            play();
+        } catch (NumberFormatException e) {
+            // オプション情報
+            
+            
+            // 先手後手情報
+            if(msg.equals(Const.BLACK_STR)) {
+                this.player.setMove(Const.BLACK_STR);
+                playServer();
+                return;
+            } else if(msg.equals(Const.WHITE_STR)) {
+                this.player.setMove(Const.WHITE_STR);
+                playServer();
+                return;
+            } else {
+                if(this.player.getMove().equals(Const.BLACK_STR)) {
+                    this.bdisp.setText(player.getName());
+                    this.wdisp.setText(msg);
+                } else {
+                    this.bdisp.setText(msg);
+                    this.wdisp.setText(player.getName());
+                }
+            }
+        }
     }
+    
+    /*
+     *  クライアント関連のメソッド
+     */
     public void updateDisp(){   // 画面を更新する
         int[][] board = game.getBoard();
         game.checkPutable(game.getIntMove());
@@ -164,6 +206,7 @@ public class Client extends JFrame implements MouseListener {
             System.out.println("not your turn");
             return;
         } else if(game.applyAction(action)) {
+            sendMessage(action);
             play();
         }
     }
@@ -176,7 +219,22 @@ public class Client extends JFrame implements MouseListener {
         this.computer = new Computer(level);
         this.player.setMove(Const.BLACK_STR); // TODO
         this.game.setMove(Const.BLACK_STR);
+        
+        if(this.player.getMove().equals(Const.BLACK_STR)) {
+            bdisp.setText(player.getName());
+            wdisp.setText("Computer Level "+level+1);
+        } else {
+            bdisp.setText("Computer Level "+level+1);
+            wdisp.setText(player.getName());
+        }
         this.updateDisp();
+        play();
+    }
+    
+    public void playServer() {
+        this.game.setMove(Const.BLACK_STR);
+        this.updateDisp();
+        this.sendMessage(player.getName());
         play();
     }
     
@@ -197,9 +255,10 @@ public class Client extends JFrame implements MouseListener {
             }
             return;
         } else {
-            // computer's turn TODO Server
             if (!game.getMove().equals(player.getMove())) {
-                game.applyAction(computer.getNextAction(game));
+                if(!(computer == null)) {
+                    game.applyAction(computer.getNextAction(game));
+                }
             }
             // パスさせる
             if(game.checkPutable(game.getIntMove()) == 0) {
@@ -220,7 +279,6 @@ public class Client extends JFrame implements MouseListener {
         } else {
             int cmdint = Integer.parseInt(command);
             cmdint = (e.getButton() == MouseEvent.BUTTON1) ? cmdint : cmdint + 64 ;
-            //sendMessage(command); //テスト用にメッセージを送信
             this.acceptOperation(Integer.toString(cmdint));
         }
     }
@@ -260,7 +318,7 @@ public class Client extends JFrame implements MouseListener {
 }
 
 class OptWindow extends JDialog implements MouseListener {
-    private JFrame mainFrame;
+    private static final long serialVersionUID = 1L;
     private Container c; // コンテナ
     private JRadioButton serverRadioButton;
     private JLabelTextField addrTextField;
@@ -274,7 +332,6 @@ class OptWindow extends JDialog implements MouseListener {
     
     public OptWindow(JFrame mainFrame, ModalityType mt) {
         super(mainFrame, mt);
-        this.mainFrame = mainFrame;
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//ウィンドウを閉じる場合の処理
         setTitle("Game Settings");//ウィンドウのタイトル
