@@ -87,7 +87,7 @@ public class Othello {
         if(action.equals(Const.PASS_STR)) {
             switchTurn();
             checkPutable(this.getIntMove());
-            System.out.println(Const.PASS_STR);
+            System.out.println(this.getMove()+" "+Const.PASS_STR);
             return true;
         }
         int iact = Integer.parseInt(action);
@@ -200,5 +200,27 @@ public class Othello {
             }
             System.out.println();
         }
+    }
+
+    public int getScore(int c) {
+        int n=0;
+        if(c == Const.BLACK) {
+            for(int i=0; i<Const.BSIZE; i++) {
+                for(int j=0; j<Const.BSIZE; j++) {
+                    if(this.board[i][j] == Const.BLACK || this.board[i][j] == Const.PBLACK) {
+                        n++;
+                    }
+                }
+            }
+        } else {
+            for(int i=0; i<Const.BSIZE; i++) {
+                for(int j=0; j<Const.BSIZE; j++) {
+                    if(this.board[i][j] == Const.WHITE || this.board[i][j] == Const.PWHITE) {
+                        n++;
+                    }
+                }
+            }
+        }
+        return n;
     }
 }

@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import util.Const;
 import util.JLabelTextField;
+import util.JPlayerDisp;
 
 import java.awt.*;
 import java.awt.Dialog.ModalityType;
@@ -14,15 +15,14 @@ import java.io.*;
 
 public class Client extends JFrame implements MouseListener {
     private JButton[][] buttonArray = new JButton[Const.BSIZE][Const.BSIZE];//オセロ盤用のボタン配列
-    private JButton stop, pass; //停止、スキップ用ボタン
-    private JLabel colorLabel; // 色表示用ラベル
-    private JLabel turnLabel; // 手番表示用ラベル
     private Container c; // コンテナ
-    private ImageIcon blackIcon, whiteIcon, boardIcon, putableIcon; //アイコン
+    private ImageIcon blackIcon, whiteIcon, boardIcon, putableIcon, arrowIcon; //アイコン
     private PrintWriter out;//データ送信用オブジェクト
     private Receiver receiver; //データ受信用オブジェクト
     private Othello game; //Othelloオブジェクト
     private Player player; //Playerオブジェクト
+    private JPlayerDisp bdisp;
+    private JPlayerDisp wdisp;
     private int[] opt = {0, 0};
     private Computer computer;
 
@@ -39,12 +39,13 @@ public class Client extends JFrame implements MouseListener {
         setSize(700, 700);//ウィンドウのサイズを設定
         setResizable(false);
         c = getContentPane();//フレームのペインを取得
-
+        
         //アイコン設定(画像ファイルをアイコンとして使う)
         whiteIcon = new ImageIcon("White.jpg");
         blackIcon = new ImageIcon("Black.jpg");
         boardIcon = new ImageIcon("GreenFrame.jpg");
         putableIcon = new ImageIcon("Putable.jpg");
+        arrowIcon = new ImageIcon("Arrow.png");
         c.setLayout(null);//
 
         //オセロ盤の生成
@@ -58,35 +59,23 @@ public class Client extends JFrame implements MouseListener {
                 c.add(buttonArray[i][j]);//ボタンの配列をペインに貼り付け
 
                 // ボタンを配置する
-                int x = (j % row) * 45;
-                int y = i * 45;
+                int x = (j % row) * 45 + 170;
+                int y = i * 45 + 100;
                 buttonArray[i][j].setBounds(x, y, 45, 45);//ボタンの大きさと位置を設定する．
                 buttonArray[i][j].addMouseListener(this);//マウス操作を認識できるようにする
                 buttonArray[i][j].setActionCommand(Integer.toString(i*Const.BSIZE + j));//ボタンを識別するための名前(番号)を付加する
             }
         }
 
-        //終了ボタン
-        stop = new JButton("終了");//終了ボタンを作成
-        c.add(stop); //終了ボタンをペインに貼り付け
-        stop.setBounds(0, row * 45 + 30, (row * 45 + 10) / 2, 30);//終了ボタンの境界を設定
-        stop.addMouseListener(this);//マウス操作を認識できるようにする
-        stop.setActionCommand("stop");//ボタンを識別するための名前を付加する
-        //パスボタン
-        pass = new JButton("パス");//パスボタンを作成
-        c.add(pass); //パスボタンをペインに貼り付け
-        pass.setBounds((row * 45 + 10) / 2, row * 45 + 30, (row * 45 + 10 ) / 2, 30);//パスボタンの境界を設定
-        pass.addMouseListener(this);//マウス操作を認識できるようにする
-        pass.setActionCommand("pass");//ボタンを識別するための名前を付加する
-        //色表示用ラベル
-        String myName = player.getName();
-        colorLabel = new JLabel(myName + "さんの色は未定です");//色情報を表示するためのラベルを作成
-        colorLabel.setBounds(10, row * 45 + 60 , row * 45 + 10, 30);//境界を設定
-        c.add(colorLabel);//色表示用ラベルをペインに貼り付け
-        //手番表示用ラベル
-        turnLabel = new JLabel("手番は未定です");//手番情報を表示するためのラベルを作成
-        turnLabel.setBounds(10, row * 45 + 120, row * 45 + 10, 30);//境界を設定
-        c.add(turnLabel);//手番情報ラベルをペインに貼り付け
+        // 手番情報などのあたり
+        bdisp = new JPlayerDisp("black", blackIcon.getImage(), arrowIcon.getImage());
+        wdisp = new JPlayerDisp("white", whiteIcon.getImage(), arrowIcon.getImage());
+        bdisp.setBounds(100, 500, 500, 45);
+        wdisp.setBounds(100, 575, 500, 45);
+        bdisp.update(300);
+        wdisp.update(300);
+        c.add(bdisp);
+        c.add(wdisp);
     }
 
     // メソッド
@@ -155,6 +144,13 @@ public class Client extends JFrame implements MouseListener {
                 if(board[i][j] == Const.PUTABLE){ buttonArray[i][j].setIcon(putableIcon);}//盤面状態に応じたアイコンを設定
             }
         }
+
+        int b = game.getScore(Const.BLACK);
+        int w = game.getScore(Const.WHITE);
+        this.bdisp.update(b);
+        this.wdisp.update(w);
+        this.bdisp.setTurn((game.getIntMove() == Const.BLACK));
+        this.wdisp.setTurn((game.getIntMove() == Const.WHITE));
     }
     public void acceptOperation(String action){    // プレイヤの操作を受付
         if(game.applyAction(action)) {
