@@ -2,16 +2,13 @@ package application;
 
 import javax.swing.*;
 
-import util.Const;
-import util.ImagePanel;
-
-import util.JLabelTextField;
-import util.JPlayerDisp;
+import util.*;
 
 import java.awt.*;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.net.*;
+import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 import java.io.*;
 
@@ -20,11 +17,11 @@ public class Client extends JFrame implements MouseListener {
     private JButton[][] buttonArray = new JButton[Const.BSIZE][Const.BSIZE];//オセロ盤用のボタン配列
     private JButton menuBtn;
     private Container c; // コンテナ
-    private ImageIcon blackIcon, whiteIcon, boardIcon, putableIcon, arrowIcon; //アイコン
     private PrintWriter out;//データ送信用オブジェクト
     private Receiver receiver; //データ受信用オブジェクト
     private Othello game; //Othelloオブジェクト
     private Player player; //Playerオブジェクト
+    private Images images;
     private JPlayerDisp bdisp;
     private JPlayerDisp wdisp;
     private int[] opt = {Const.OFF, Const.OFF};
@@ -34,14 +31,14 @@ public class Client extends JFrame implements MouseListener {
     /*
      *  コンストラクタ
      */
-    public Client(Othello game, Player player) { //OthelloオブジェクトとPlayerオブジェクトを引数とする
+    public Client(Othello game, Player player, Images images) { //OthelloオブジェクトとPlayerオブジェクトを引数とする
         this.game = game; //引数のOthelloオブジェクトを渡す
         this.player = player; //引数のPlayerオブジェクトを渡す
+        this.images = images;
         int[][] board = game.getBoard(); //getGridメソッドにより局面情報を取得
         int row = Const.BSIZE; //getRowメソッドによりオセロ盤の縦横マスの数を取得
-        Image bgimg = (new ImageIcon("resources/bg.jpg")).getImage();
         ImagePanel ip= new ImagePanel();
-        ip.setImage(bgimg);
+        ip.setImage(images.getBgIcon().getImage());
         
         //ウィンドウ設定
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
@@ -51,23 +48,16 @@ public class Client extends JFrame implements MouseListener {
         this.add(ip);
         
         c = ip;//フレームのペインを取得
-        
-        //アイコン設定(画像ファイルをアイコンとして使う)
-        whiteIcon = new ImageIcon("resources/White.jpg");
-        blackIcon = new ImageIcon("resources/Black.jpg");
-        boardIcon = new ImageIcon("resources/GreenFrame.jpg");
-        putableIcon = new ImageIcon("resources/Putable.jpg");
-        arrowIcon = new ImageIcon("resources/Arrow.png");
-        c.setLayout(null);//
+        c.setLayout(null);
 
         //オセロ盤の生成
 
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.BLACK){ buttonArray[i][j] = new JButton(blackIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.WHITE){ buttonArray[i][j] = new JButton(whiteIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.SPACE){ buttonArray[i][j] = new JButton(boardIcon);}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.PUTABLE){ buttonArray[i][j] = new JButton(putableIcon);}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.BLACK){ buttonArray[i][j] = new JButton(images.getBlackIcon());}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.WHITE){ buttonArray[i][j] = new JButton(images.getWhiteIcon());}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.SPACE){ buttonArray[i][j] = new JButton(images.getBoardIcon());}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.PUTABLE){ buttonArray[i][j] = new JButton(images.getPutableIcon());}//盤面状態に応じたアイコンを設定
                 c.add(buttonArray[i][j]);//ボタンの配列をペインに貼り付け
 
                 // ボタンを配置する
@@ -89,8 +79,8 @@ public class Client extends JFrame implements MouseListener {
         
         
         // 手番情報などのあたり
-        bdisp = new JPlayerDisp("", blackIcon.getImage(), arrowIcon.getImage());
-        wdisp = new JPlayerDisp("", whiteIcon.getImage(), arrowIcon.getImage());
+        bdisp = new JPlayerDisp("", images.getBlackIcon().getImage(), images.getArrowIcon().getImage());
+        wdisp = new JPlayerDisp("", images.getWhiteIcon().getImage(), images.getArrowIcon().getImage());
         bdisp.setBounds(100, 500, 500, 40);
         wdisp.setBounds(100, 575, 500, 40);
         bdisp.update(0);
@@ -195,13 +185,13 @@ public class Client extends JFrame implements MouseListener {
         game.checkPutable(game.getIntMove());
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(blackIcon); continue;}//盤面状態に応じたアイコンを設定
-                if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(whiteIcon); continue;}
-                if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(boardIcon); continue;}
+                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(images.getBlackIcon()); continue;}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(images.getWhiteIcon()); continue;}
+                if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(images.getBoardIcon()); continue;}
                 if(board[i][j] == Const.PUTABLE && opt[1] == Const.ON) {
-                    buttonArray[i][j].setIcon(putableIcon); continue;
+                    buttonArray[i][j].setIcon(images.getPutableIcon()); continue;
                 } else {
-                    buttonArray[i][j].setIcon(boardIcon); continue;
+                    buttonArray[i][j].setIcon(images.getBoardIcon()); continue;
                 }
             }
         }
@@ -310,7 +300,17 @@ public class Client extends JFrame implements MouseListener {
 
     //テスト用のmain
     public static void main(String args[]){
-        // TODO デザインの処理
+        Images images = new Images();
+        try {
+            images.loadImages();
+        } catch (MissingResourceException e) {
+            JOptionPane.showMessageDialog(null, "Please check images.propaties." + e, "Failed to load images.", JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
+        } catch (Exception e) {
+            System.err.println(e);
+            System.exit(-1);
+        }
+        
         //ログイン処理
         String myName = JOptionPane.showInputDialog(null,"Enter your name.","login",JOptionPane.QUESTION_MESSAGE);
         if(myName.equals("")){
@@ -319,7 +319,7 @@ public class Client extends JFrame implements MouseListener {
         Player player = new Player(); //プレイヤオブジェクトの用意(ログイン)
         player.setName(myName); //名前を受付
         Othello game = new Othello(); //オセロオブジェクトを用意
-        Client oclient = new Client(game, player); //引数としてオセロオブジェクトを渡す
+        Client oclient = new Client(game, player, images); //引数としてオセロオブジェクトを渡す
         oclient.setVisible(true);
         
         OptWindow optwin = new OptWindow(oclient, ModalityType.APPLICATION_MODAL);

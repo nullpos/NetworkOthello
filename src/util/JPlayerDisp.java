@@ -18,6 +18,7 @@ public class JPlayerDisp extends JPanel {
     public JPlayerDisp(String name, Image img, Image arrowImg) {
         int tate = 45;
         this.canvas = new OCanvas(img, arrowImg);
+        this.canvas.setSize(120, tate);
         this.nameLabel = new JLabel(name);
         this.nameLabel.setSize(300, tate);
         this.nameLabel.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -56,7 +57,6 @@ class OCanvas extends Canvas {
         this.img = img;
         this.arrowImg = arrowImg;
         turn = true;
-        this.setSize(120, 40);
     }
 
     public void setTurn(boolean b) {
