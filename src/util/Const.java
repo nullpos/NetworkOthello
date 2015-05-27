@@ -20,6 +20,8 @@ public class Const {
     public static final String WHITE_STR = "WHITE";
     public static final String PASS_STR = "PASS";
     
+    public static final String[] OPTION_STR = {"PremiumOption"};
+    
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
     public static final int[] LEVEL_DEPTH = {1, 2, 3, 4, 5};

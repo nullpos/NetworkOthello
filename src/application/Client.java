@@ -155,7 +155,15 @@ public class Client extends JFrame implements MouseListener {
             game.applyAction(msg);
             play();
         } catch (NumberFormatException e) {
-            // オプション情報 TODO
+            // オプション情報
+            if(msg.startsWith(Const.OPTION_STR[0])) {
+                msg = msg.replace(Const.OPTION_STR[0], "");
+                System.out.println(msg);
+                if(player.getMove().equals(Const.WHITE_STR)) {
+                    opt[0] = Integer.parseInt(msg);
+                }
+                return;
+            }
             
             // 先手後手情報
             if(msg.equals(Const.BLACK_STR)) {
@@ -170,9 +178,11 @@ public class Client extends JFrame implements MouseListener {
                 if(this.player.getMove().equals(Const.BLACK_STR)) {
                     this.bdisp.setText(player.getName());
                     this.wdisp.setText(msg);
+                    return;
                 } else {
                     this.bdisp.setText(msg);
                     this.wdisp.setText(player.getName());
+                    return;
                 }
             }
         }
@@ -245,6 +255,7 @@ public class Client extends JFrame implements MouseListener {
         this.game.setMove(Const.BLACK_STR);
         this.updateDisp();
         this.sendMessage(player.getName());
+        this.sendMessage(Const.OPTION_STR[0] + opt[0]);
         play();
     }
     
