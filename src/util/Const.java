@@ -3,27 +3,33 @@ package util;
 public class Const {
     private Const() {};
 
+    // 基本的な設定
     public static final int SPACE = 0;
     public static final int BLACK = 1;
     public static final int WHITE = 2;
-    public static final int PBLACK = 3; //ひっくり返らない
-    public static final int PWHITE = 4; //やつ
+    public static final int PBLACK = 3; // ひっくり返らない
+    public static final int PWHITE = 4; // やつ
     public static final int PUTABLE = 5; // 置ける場所
 
     public static final int BSIZE = 8; // ボードのサイズ
-    public static final int OPTSIZE = 2; // オプション
-    
-    public static final int NGENE = 46;
+    public static final int OPTSIZE = 2; // オプションの数
 
     public static final String DRAW_STR = "DRAW";
     public static final String BLACK_STR = "BLACK";
     public static final String WHITE_STR = "WHITE";
     public static final String PASS_STR = "PASS";
-    
-    public static final String[] OPTION_STR = {"PremiumOption"};
-    
+
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
+    // オプション関連
+    public static final String[] OPTION_STR = {"Premium__Option"};
+    public static final int OFF = 0;
+    public static final int ON = 1;
+    
+    //学習関連
+    public static final int NGENE = 46;
+    
+    // コンピュータ関連
     public static final int[] LEVEL_DEPTH = {1, 2, 3, 4, 5};
     public static final int[][] WEIGHT = {
         {0, 1, 2, 3, 3, 2, 1, 0},
@@ -35,7 +41,8 @@ public class Const {
         {1, 4, 5, 6, 6, 5, 4, 1},
         {0, 1, 2, 3, 3, 2, 1, 0}
     };
-
+    
+    // 盤面の設定
     private static final int $ = Const.SPACE;
     private static final int b = Const.BLACK;
     private static final int w = Const.WHITE;
@@ -63,7 +70,8 @@ public class Const {
         {b, b, w, b, b, b, w, w},
         {b, b, b, b, b, w, w, w}
     };
-
-    public static final int OFF = 0;
-    public static final int ON = 1;
+    
+    // サーバー関連
+    public static final int MEMBER = 1024; // 最大接続可能人数
+    public static final String LEAVE_MES = "LE__FT__"; // 切断されたときに送る
 }

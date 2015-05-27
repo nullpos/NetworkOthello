@@ -174,16 +174,31 @@ public class Client extends JFrame implements MouseListener {
                 this.player.setMove(Const.WHITE_STR);
                 playServer();
                 return;
-            } else {
-                if(this.player.getMove().equals(Const.BLACK_STR)) {
-                    this.bdisp.setText(player.getName());
-                    this.wdisp.setText(msg);
-                    return;
-                } else {
-                    this.bdisp.setText(msg);
-                    this.wdisp.setText(player.getName());
-                    return;
+            }
+
+            // 切断されたとき
+            if(msg.equals(Const.LEAVE_MES)) {
+                String winner = player.getMove();
+                System.out.println(player.getMove() + " is winner.");
+                this.updateDisp();
+                if(winner.equals(Const.BLACK_STR)) {
+                    this.bdisp.setTurn(true);
+                    this.wdisp.setTurn(false);
+                } else if(winner.equals(Const.WHITE_STR)) {
+                    this.bdisp.setTurn(false);
+                    this.wdisp.setTurn(true);
                 }
+            }
+            
+            // 名前はどういうので来るかわからない
+            if(this.player.getMove().equals(Const.BLACK_STR)) {
+                this.bdisp.setText(player.getName());
+                this.wdisp.setText(msg);
+                return;
+            } else {
+                this.bdisp.setText(msg);
+                this.wdisp.setText(player.getName());
+                return;
             }
         }
     }
@@ -262,7 +277,7 @@ public class Client extends JFrame implements MouseListener {
     public void play() {
         if(game.isGameFinished()) {
             String winner = game.whichIsWinner();
-            System.out.println(game.whichIsWinner() + " is winner.");
+            System.out.println(winner + " is winner.");
             this.updateDisp();
             if(winner.equals(Const.BLACK_STR)) {
                 this.bdisp.setTurn(true);
