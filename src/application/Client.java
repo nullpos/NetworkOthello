@@ -9,6 +9,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.net.*;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.io.*;
 
@@ -402,9 +403,19 @@ class OptWindow extends JDialog implements MouseListener {
         bGroup.add(serverRadioButton);
         c.add(serverRadioButton);
 
-        addrTextField = new JLabelTextField("IP", "127.0.0.1");
+        ResourceBundle rb = ResourceBundle.getBundle("settings");
+        String ip = "127.0.0.1";
+        String port = "10000";
+        try {
+            port = rb.getString("Port");
+            ip = rb.getString("Server");
+        } catch (MissingResourceException e) {
+            System.err.println("Server settings missing. Default settings set.");
+        }
+        
+        addrTextField = new JLabelTextField("IP", ip);
         c.add(addrTextField);
-        portTextField = new JLabelTextField("port", "10000");
+        portTextField = new JLabelTextField("port", port);
         c.add(portTextField);
         
         //local

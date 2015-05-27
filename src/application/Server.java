@@ -2,6 +2,8 @@ package application;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -124,7 +126,15 @@ public class Server{
     }
     
     public static void main(String[] args){ //main
-        Server server = new Server(10000); //待ち受けポート10000番でサーバオブジェクトを準備
+        ResourceBundle rb = ResourceBundle.getBundle("settings");
+        int port = 10000;
+        try {
+            port = Integer.parseInt(rb.getString("Port"));
+        } catch (MissingResourceException e) {
+            System.err.println("Port settings missing. Using default port 10000.");
+        }
+        
+        Server server = new Server(port); //サーバオブジェクトを準備
         server.acceptClient(); //クライアント受け入れを開始
     }
 }

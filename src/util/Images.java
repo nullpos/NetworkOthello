@@ -13,7 +13,7 @@ public class Images {
     public Images() {}
     
     public void loadImages() throws MissingResourceException, IOException {
-        ResourceBundle rb = ResourceBundle.getBundle("images");
+        ResourceBundle rb = ResourceBundle.getBundle("settings");
         
         blackIcon = new ImageIcon(getPath(rb.getString("Black")));
         pBlackIcon = new ImageIcon(getPath(rb.getString("PBlack")));
