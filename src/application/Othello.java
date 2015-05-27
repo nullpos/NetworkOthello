@@ -73,7 +73,7 @@ public class Othello {
         }
         
         int iact = Integer.parseInt(action);
-        boolean p; // TODO PBLACK
+        boolean p;
         if(iact > 63) {
             p = true;
             iact -= 64;
@@ -136,7 +136,8 @@ public class Othello {
                 y -= dy;
                 while(x != nx || y != ny) {
                     if(b) {
-                        board[x][y] = move;
+                        if(!(board[x][y] == Const.PBLACK || board[x][y] == Const.PWHITE))
+                            board[x][y] = move;
                         x -= dx;
                         y -= dy;
                         flag = true;

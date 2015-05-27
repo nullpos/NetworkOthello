@@ -55,7 +55,9 @@ public class Client extends JFrame implements MouseListener {
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(board[i][j] == Const.BLACK){ buttonArray[i][j] = new JButton(images.getBlackIcon());}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.PBLACK){ buttonArray[i][j] = new JButton(images.getpBlackIcon());}//盤面状態に応じたアイコンを設定
                 if(board[i][j] == Const.WHITE){ buttonArray[i][j] = new JButton(images.getWhiteIcon());}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.PWHITE){ buttonArray[i][j] = new JButton(images.getpWhiteIcon());}//盤面状態に応じたアイコンを設定
                 if(board[i][j] == Const.SPACE){ buttonArray[i][j] = new JButton(images.getBoardIcon());}//盤面状態に応じたアイコンを設定
                 if(board[i][j] == Const.PUTABLE){ buttonArray[i][j] = new JButton(images.getPutableIcon());}//盤面状態に応じたアイコンを設定
                 c.add(buttonArray[i][j]);//ボタンの配列をペインに貼り付け
@@ -153,8 +155,7 @@ public class Client extends JFrame implements MouseListener {
             game.applyAction(msg);
             play();
         } catch (NumberFormatException e) {
-            // オプション情報
-            
+            // オプション情報 TODO
             
             // 先手後手情報
             if(msg.equals(Const.BLACK_STR)) {
@@ -185,8 +186,10 @@ public class Client extends JFrame implements MouseListener {
         game.checkPutable(game.getIntMove());
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(images.getBlackIcon()); continue;}//盤面状態に応じたアイコンを設定
+                if(board[i][j] == Const.BLACK){ buttonArray[i][j].setIcon(images.getBlackIcon()); continue;}
+                if(board[i][j] == Const.PBLACK){ buttonArray[i][j].setIcon(images.getpBlackIcon()); continue;}
                 if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(images.getWhiteIcon()); continue;}
+                if(board[i][j] == Const.PWHITE){ buttonArray[i][j].setIcon(images.getpWhiteIcon()); continue;}
                 if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(images.getBoardIcon()); continue;}
                 if(board[i][j] == Const.PUTABLE && opt[1] == Const.ON) {
                     buttonArray[i][j].setIcon(images.getPutableIcon()); continue;
@@ -207,6 +210,7 @@ public class Client extends JFrame implements MouseListener {
             return;
         } else if(game.applyAction(action)) {
             if(computer == null ) sendMessage(action);
+            if(Integer.parseInt(action) > 64) opt[0]--;
             play();
         }
     }
@@ -228,9 +232,9 @@ public class Client extends JFrame implements MouseListener {
         
         if(this.player.getMove().equals(Const.BLACK_STR)) {
             bdisp.setText(player.getName());
-            wdisp.setText("Computer Level "+(level+1));
+            wdisp.setText("Lv."+(level+1) + " Computer");
         } else {
-            bdisp.setText("Computer Level "+(level+1));
+            bdisp.setText("Lv."+(level+1) + " Computer");
             wdisp.setText(player.getName());
         }
         this.updateDisp();
@@ -289,7 +293,9 @@ public class Client extends JFrame implements MouseListener {
             optwin.setVisible(true);
         } else {
             int cmdint = Integer.parseInt(command);
-            cmdint = (e.getButton() == MouseEvent.BUTTON1) ? cmdint : cmdint + 64 ;
+            if(e.getButton() == MouseEvent.BUTTON3 && opt[0] == 1) {
+                cmdint += 64;
+            }
             this.acceptOperation(Integer.toString(cmdint));
         }
     }
@@ -399,9 +405,8 @@ class OptWindow extends JDialog implements MouseListener {
     }
 
     public void setOption(int[] option) {
-        if(option[0] == Const.ON) immoveCheckBox.setSelected(true);
-        if(option[1] == Const.ON) showCheckBox.setSelected(true);
-        
+        immoveCheckBox.setSelected((option[0] == Const.ON) ? true : false);
+        showCheckBox.setSelected((option[1] == Const.ON) ? true : false);
     }
 
     public void setMode(int i) {

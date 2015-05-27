@@ -52,8 +52,8 @@ public class Const {
         {$, $, $, $, $, $, $, $}
     };
     public static final int[][] INIT_BOARD2 = {
-        {w, w, w, b, w, $, b, w},
-        {b, w, b, b, b, b, b, w},
+        {w, w, w, b, W, $, b, w},
+        {b, w, b, b, b, w, b, w},
         {b, w, w, b, w, b, w, w},
         {b, w, b, b, w, w, w, w},
         {b, w, b, b, w, b, w, $},
