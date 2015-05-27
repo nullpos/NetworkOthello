@@ -98,6 +98,9 @@ public class Server{
 
     public boolean isRoomFull(int i){ //クライアント接続状態の確認
         if(i == 0 || i == Const.MEMBER - 1) return false;
+        if(i % 2 == oddeven) {
+            return false;
+        }
         if(online[i-1] && online[i]){
             return true;
         } else {

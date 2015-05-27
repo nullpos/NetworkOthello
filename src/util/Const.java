@@ -22,7 +22,7 @@ public class Const {
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
     // オプション関連
-    public static final String[] OPTION_STR = {"Premium__Option"};
+    public static final String[] OPTION_STR = {"Premium_Option"};
     public static final int OFF = 0;
     public static final int ON = 1;
     
@@ -73,5 +73,5 @@ public class Const {
     
     // サーバー関連
     public static final int MEMBER = 1024; // 最大接続可能人数
-    public static final String LEAVE_MES = "LE__FT__"; // 切断されたときに送る
+    public static final String LEAVE_MES = "PLAYER LEFT!"; // 切断されたときに送る
 }
