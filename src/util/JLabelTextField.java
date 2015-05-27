@@ -29,4 +29,5 @@ public class JLabelTextField extends JPanel {
     public void setText(String txt){tf.setText(txt);}
     public String getlbText(){ return lb.getText();}
     public void setlbText(String txt){lb.setText(txt);}
+    public JTextField getTextField() { return this.tf; }
 }

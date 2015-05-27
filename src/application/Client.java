@@ -407,7 +407,10 @@ class OptWindow extends JDialog implements MouseListener {
     public void setMode(int i) {
         if(i == 1) {
             serverRadioButton.setEnabled(false);
+            addrTextField.getTextField().setEnabled(false);
             localRadioButton.setEnabled(false);
+            portTextField.getTextField().setEnabled(false);
+            compComboBox.setEnabled(false);
             immoveCheckBox.setEnabled(false);
         }
     }
