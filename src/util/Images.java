@@ -13,7 +13,7 @@ public class Images {
     public Images() {}
     
     public void loadImages() throws MissingResourceException, IOException {
-        ResourceBundle rb = ResourceBundle.getBundle("settings");
+        ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
         
         blackIcon = new ImageIcon(getPath(rb.getString("Black")));
         pBlackIcon = new ImageIcon(getPath(rb.getString("PBlack")));
@@ -22,7 +22,7 @@ public class Images {
         boardIcon = new ImageIcon(getPath(rb.getString("Board")));
         putableIcon = new ImageIcon(getPath(rb.getString("Putable")));
         arrowIcon = new ImageIcon(getPath(rb.getString("Arrow")));
-        bgIcon = new ImageIcon(getPath(rb.getString("BackgroundImage")));
+        bgIcon = new ImageIcon(getPath(rb.getString("Background")));
     }
     
     public String getPath(String path) throws IOException {

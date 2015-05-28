@@ -19,10 +19,13 @@ public class Const {
     public static final String WHITE_STR = "WHITE";
     public static final String PASS_STR = "PASS";
 
+    public static final String SETTINGS_NAME = "settings";
+    public static final String PLAYER_NAME_ID = "pLAYERnAME:";
+
     public static final String[] PRINT_BOARD = {"_", "b", "w", "B", "W", "@"};
     
     // オプション関連
-    public static final String[] OPTION_STR = {"Premium_Option"};
+    public static final String[] OPTION_ID = {"Premium_Option"};
     public static final int OFF = 0;
     public static final int ON = 1;
     

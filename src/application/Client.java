@@ -157,8 +157,8 @@ public class Client extends JFrame implements MouseListener {
             play();
         } catch (NumberFormatException e) {
             // オプション情報
-            if(msg.startsWith(Const.OPTION_STR[0])) {
-                msg = msg.replace(Const.OPTION_STR[0], "");
+            if(msg.startsWith(Const.OPTION_ID[0])) {
+                msg = msg.replace(Const.OPTION_ID[0], "");
                 System.out.println(msg);
                 if(player.getMove().equals(Const.WHITE_STR)) {
                     opt[0] = Integer.parseInt(msg);
@@ -185,20 +185,25 @@ public class Client extends JFrame implements MouseListener {
                 if(winner.equals(Const.BLACK_STR)) {
                     this.bdisp.setTurn(true);
                     this.wdisp.setTurn(false);
+                    this.wdisp.setText(msg);
                 } else if(winner.equals(Const.WHITE_STR)) {
                     this.bdisp.setTurn(false);
+                    this.bdisp.setText(msg);
                     this.wdisp.setTurn(true);
                 }
+                return;
             }
             
-            // 名前はどういうので来るかわからない
-            if(this.player.getMove().equals(Const.BLACK_STR)) {
-                this.bdisp.setText(player.getName());
-                this.wdisp.setText(msg);
-                return;
-            } else {
-                this.bdisp.setText(msg);
-                this.wdisp.setText(player.getName());
+            // 名前
+            if(msg.startsWith(Const.PLAYER_NAME_ID)) {
+                msg = msg.replace(Const.PLAYER_NAME_ID, "");
+                if(this.player.getMove().equals(Const.BLACK_STR)) {
+                    this.bdisp.setText(player.getName());
+                    this.wdisp.setText(msg);
+                } else {
+                    this.bdisp.setText(msg);
+                    this.wdisp.setText(player.getName());
+                }
                 return;
             }
         }
@@ -270,8 +275,8 @@ public class Client extends JFrame implements MouseListener {
     public void playServer() {
         this.game.setMove(Const.BLACK_STR);
         this.updateDisp();
-        this.sendMessage(player.getName());
-        this.sendMessage(Const.OPTION_STR[0] + opt[0]);
+        this.sendMessage(Const.PLAYER_NAME_ID + player.getName());
+        this.sendMessage(Const.OPTION_ID[0] + opt[0]);
         play();
     }
     
@@ -337,7 +342,7 @@ public class Client extends JFrame implements MouseListener {
         try {
             images.loadImages();
         } catch (MissingResourceException e) {
-            JOptionPane.showMessageDialog(null, "Please check images.propaties." + e, "Failed to load images.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please check "+Const.SETTINGS_NAME+".propaties." + e, "Failed to load images.", JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         } catch (Exception e) {
             System.err.println(e);
@@ -403,7 +408,7 @@ class OptWindow extends JDialog implements MouseListener {
         bGroup.add(serverRadioButton);
         c.add(serverRadioButton);
 
-        ResourceBundle rb = ResourceBundle.getBundle("settings");
+        ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
         String ip = "127.0.0.1";
         String port = "10000";
         try {
