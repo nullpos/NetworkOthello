@@ -12,8 +12,8 @@ public class Images {
     
     public Images() {}
     
-    public void loadImages() throws MissingResourceException, IOException {
-        ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
+    public void loadImages(String path) throws MissingResourceException, IOException {
+        ResourceBundle rb = ResourceBundle.getBundle(path);
         
         blackIcon = new ImageIcon(getPath(rb.getString("Black")));
         pBlackIcon = new ImageIcon(getPath(rb.getString("PBlack")));

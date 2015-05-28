@@ -340,7 +340,8 @@ public class Client extends JFrame implements MouseListener {
     public static void main(String args[]){
         Images images = new Images();
         try {
-            images.loadImages();
+            ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
+            images.loadImages(rb.getString("Preset"));
         } catch (MissingResourceException e) {
             JOptionPane.showMessageDialog(null, "Please check "+Const.SETTINGS_NAME+".propaties." + e, "Failed to load images.", JOptionPane.ERROR_MESSAGE);
             System.exit(-1);

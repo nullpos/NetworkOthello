@@ -1,6 +1,9 @@
 /genes/
 
-/bin/
+/bin/application
+/bin/util/
+/bin/learning
+
 /.settings/xs
 
 *.class
