@@ -1,6 +1,7 @@
 package learning;
 
 import java.io.*;
+import java.util.Iterator;
 
 import util.QSort;
 
@@ -116,5 +117,18 @@ public class GA {
     public void print(PrintStream ps){
         for(int i=0;i<gene.length;i++)
             ps.println("# "+i+":"+gene[i]+" "+gene[i].getFitness());
+    }
+    
+    /**
+     * 全遺伝子情報の書き出し
+     */
+    public void out(PrintStream ps){
+        for(int i=0;i<gene.length;i++) {
+            ps.print("# "+i+":"+gene[i]);
+            for (int j = 0; j < gene[i].chromosome.length; j++) {
+                ps.print(":" + gene[i].chromosome[j]);
+            }
+            ps.println(" "+gene[i].getFitness());
+        }
     }
 }

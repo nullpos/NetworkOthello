@@ -4,11 +4,22 @@ import util.Const;
 
 public class Computer {
     private int level;
+    private byte[] g = new byte[Const.CHROMO_NUM];
     
     public Computer(int n) {
         level = n;
+        for(int i=0; i<g.length; i++) {
+            g[i] = Const.GENE_ANS[n][i];
+        }
     }
     
+    public Computer(int n, byte[] chromosome) {
+        level = n;
+        for(int i=0; i<g.length; i++) {
+            g[i] = chromosome[i];
+        }
+    }
+
     public String getNextAction(Othello game) {
         Othello nextGame = search(game);
 
@@ -19,7 +30,7 @@ public class Computer {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(b[i][j] != Const.PUTABLE) continue;
                 if(nb[i][j] == Const.BLACK || nb[i][j] == Const.WHITE) {
-                    System.out.println("("+i+","+j+")");
+                    //System.out.println("("+i+","+j+")");
                     return Integer.toString(i * Const.BSIZE + j);
                 }
             }
@@ -102,8 +113,8 @@ public class Computer {
     }
     
     public int eval(Othello game) {
-        byte[] g = {1,2,3,4,5,6,7,8,9,10}; // TODO
         int move = game.getIntMove();
+        int nmove = (move == Const.BLACK) ? Const.WHITE : Const.BLACK;
         int[][] board = game.getBoard();
         int value = 0;
         
@@ -135,6 +146,8 @@ public class Computer {
                 }
             }
         }
+        value += (game.getScore(move) - game.getScore(nmove)) * g[10];
+        value += game.checkPutable(move) * g[11];
         return value;
     }
 }

@@ -30,7 +30,17 @@ public class Const {
     public static final int ON = 1;
     
     //学習関連
-    public static final int NGENE = 46;
+    public static final int GENE_NUM = 20; // 集団の遺伝子数
+    public static final int CHROMO_NUM = 12; // chromosomeの数
+    public static final String GENE_FILE = "genes.txt"; // 遺伝子情報を保存するファイル名
+    
+    public static final byte[][] GENE_ANS = {
+        {1,2,3,4,5,6,7,8,9,10,11,12},
+        {1,2,3,4,5,6,7,8,9,10,11,12},
+        {1,2,3,4,5,6,7,8,9,10,11,12},
+        {1,2,3,4,5,6,7,8,9,10,11,12},
+        {1,2,3,4,5,6,7,8,9,10,11,12}
+    };
     
     // コンピュータ関連
     public static final int[] LEVEL_DEPTH = {1, 2, 3, 4, 5};

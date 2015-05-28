@@ -68,7 +68,7 @@ public class Othello {
         if(action.equals(Const.PASS_STR)) {
             switchTurn();
             checkPutable(this.getIntMove());
-            System.out.println(this.getMove()+" "+Const.PASS_STR);
+            //System.out.println(this.getMove()+" "+Const.PASS_STR);
             return true;
         }
         
