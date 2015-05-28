@@ -1,7 +1,6 @@
 package learning;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Calendar;
@@ -17,8 +16,8 @@ public class Main {
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
         Calendar now = Calendar.getInstance();
-        String file_name = Const.GENE_DIR + ((now.get(now.HOUR_OF_DAY) < 10) ? "0"+now.get(now.HOUR_OF_DAY) : now.get(now.HOUR_OF_DAY)) +"-"+ 
-                now.get(now.MINUTE) +"-"+ now.get(now.SECOND) + ".txt";
+        String file_name = Const.GENE_DIR + ((now.get(Calendar.HOUR_OF_DAY) < 10) ? "0"+now.get(Calendar.HOUR_OF_DAY) : now.get(Calendar.HOUR_OF_DAY)) +"-"+ 
+                now.get(Calendar.MINUTE) +"-"+ now.get(Calendar.SECOND) + ".txt";
         
         PrintStream ps = null;
         try {

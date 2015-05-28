@@ -59,9 +59,9 @@ public class Const {
     private static final int $ = Const.SPACE;
     private static final int b = Const.BLACK;
     private static final int w = Const.WHITE;
-    private static final int B = Const.PBLACK;
+    //private static final int B = Const.PBLACK;
     private static final int W = Const.PWHITE;
-    private static final int O = Const.PUTABLE;
+    //private static final int O = Const.PUTABLE;
 
     public static final int[][] INIT_BOARD = {
         {$, $, $, $, $, $, $, $},

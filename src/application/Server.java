@@ -90,7 +90,9 @@ public class Server{
                     sendColor(i);
                 }
                 i++;
+                if(i==Const.MEMBER) break;
             }
+            ss.close();
         } catch (Exception e) {
             System.err.println("ソケット作成時にエラーが発生しました: " + e);
         }
