@@ -408,10 +408,10 @@ class OptWindow extends JDialog implements MouseListener {
         bGroup.add(serverRadioButton);
         c.add(serverRadioButton);
 
-        ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
         String ip = "127.0.0.1";
         String port = "10000";
         try {
+            ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
             port = rb.getString("Port");
             ip = rb.getString("Server");
         } catch (MissingResourceException e) {

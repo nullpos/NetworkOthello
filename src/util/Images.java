@@ -26,7 +26,7 @@ public class Images {
     }
     
     public String getPath(String path) throws IOException {
-        return new File(path).getCanonicalPath().replace("\\\\", "/").replace("\\", "/");
+        return new File(path).getCanonicalPath().replace("\\", "/");
     }
 
     public ImageIcon getBlackIcon() {

@@ -129,9 +129,9 @@ public class Server{
     }
     
     public static void main(String[] args){ //main
-        ResourceBundle rb = ResourceBundle.getBundle("settings");
         int port = 10000;
         try {
+            ResourceBundle rb = ResourceBundle.getBundle(Const.SETTINGS_NAME);
             port = Integer.parseInt(rb.getString("Port"));
         } catch (MissingResourceException e) {
             System.err.println("Port settings missing. Using default port 10000.");

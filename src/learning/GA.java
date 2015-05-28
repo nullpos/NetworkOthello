@@ -124,11 +124,12 @@ public class GA {
      */
     public void out(PrintStream ps){
         for(int i=0;i<gene.length;i++) {
-            ps.print("# "+i+":"+gene[i]);
-            for (int j = 0; j < gene[i].chromosome.length; j++) {
-                ps.print(":" + gene[i].chromosome[j]);
+            ps.printf("# %02d: "+ gene[i].getFitness() +" {", i);
+            ps.print(gene[i].chromosome[0]);
+            for (int j = 1; j < gene[i].chromosome.length; j++) {
+                ps.print(", " + gene[i].chromosome[j]);
             }
-            ps.println(" "+gene[i].getFitness());
+            ps.println("}");
         }
     }
 }
