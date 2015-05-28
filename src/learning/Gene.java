@@ -1,7 +1,5 @@
 package learning;
 
-import java.util.Random;
-
 import util.Const;
 import application.*;
 
@@ -35,8 +33,15 @@ public class Gene extends AbstructGene {
         int comLevel = 0;
         Othello game = new Othello();
         Computer[] com = { new Computer(comLevel, this.chromosome), new Computer(comLevel, g.chromosome) };
-        Random r = new Random();
         
+        // 先攻のみ
+        int move = Const.BLACK;
+        int nmove = Const.WHITE;
+        int i = 0;
+        
+        /*
+        // 先攻後攻をランダムに
+        Random r = new Random();
         int move = Const.BLACK;
         int nmove = Const.WHITE;
         int i = 0;
@@ -45,6 +50,7 @@ public class Gene extends AbstructGene {
             nmove = Const.BLACK;
             i = 1;
         }
+        */
 
         game.checkPutable(Const.BLACK);
         game.setMove(Const.BLACK_STR);

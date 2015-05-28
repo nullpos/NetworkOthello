@@ -23,6 +23,12 @@ public abstract class AbstructGene implements Sortable {
     
     public double getFitness(){ return fitness; }
     
+    public void setChromosome(byte[] c) {
+        for (int i = 0; i < chromosome.length; i++) {
+            chromosome[i] = c[i];
+        }
+    }
+    
     public boolean isBefore(Sortable s){
         return fitness > ((Gene)s).fitness;
     }
