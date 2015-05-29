@@ -117,21 +117,39 @@ public class Computer {
         int nmove = (move == Const.BLACK) ? Const.WHITE : Const.BLACK;
         int[][] board = game.getBoard();
         int value = 0;
+        int turn = game.getTurn();
+        int index;
         
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 switch (board[i][j]) {
                 case Const.BLACK:
                 case Const.PBLACK:
-                    if (move == Const.BLACK) {
-                        value += g[Const.WEIGHT[i][j]];
+                    if(turn < 20) {
+                        index = Const.WEIGHT[i][j];
+                    } else if(turn < 40) {
+                        index = Const.WEIGHT[i][j] + 12;
                     } else {
-                        value -= g[Const.WEIGHT[i][j]];
+                        index = Const.WEIGHT[i][j] + 24;
+                    }
+                    
+                    if (move == Const.BLACK) {
+                        value += g[index];
+                    } else {
+                        value -= g[index];
                     }
                     break;
                     
                 case Const.WHITE:
                 case Const.PWHITE:
+                    if(turn < 20) {
+                        index = Const.WEIGHT[i][j];
+                    } else if(turn < 40) {
+                        index = Const.WEIGHT[i][j] + 12;
+                    } else {
+                        index = Const.WEIGHT[i][j] + 24;
+                    }
+                    
                     if (move == Const.BLACK) {
                         value -= g[Const.WEIGHT[i][j]];
                     } else {
@@ -146,8 +164,18 @@ public class Computer {
                 }
             }
         }
-        value += (game.getScore(move) - game.getScore(nmove)) * g[10];
-        value += game.checkPutable(move) * g[11];
+        
+
+        if(turn < 20) {
+            index = 10;
+        } else if(turn < 40) {
+            index = 10 + 12;
+        } else {
+            index = 10 + 24;
+        }
+        
+        value += (game.getScore(move) - game.getScore(nmove)) * g[index];
+        value += game.checkPutable(move) * g[index];
         return value;
     }
 }

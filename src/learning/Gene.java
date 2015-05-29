@@ -33,31 +33,36 @@ public class Gene extends AbstructGene {
         int comLevel = 0;
         Othello game = new Othello();
         Computer[] com = { new Computer(comLevel, this.chromosome), new Computer(comLevel, g.chromosome) };
-        
-        // 先攻のみ
-        int move = Const.BLACK;
-        int nmove = Const.WHITE;
-        int i = 0;
-        
-        /*
-        // 先攻後攻をランダムに
-        Random r = new Random();
-        int move = Const.BLACK;
-        int nmove = Const.WHITE;
-        int i = 0;
-        if(r.nextDouble() < 0.5) {
-            move = Const.WHITE;
-            nmove = Const.BLACK;
-            i = 1;
-        }
-        */
 
+        // 先攻
+        int move = Const.BLACK;
+        int nmove = Const.WHITE;
+        int i = 0;
+        
         game.checkPutable(Const.BLACK);
         game.setMove(Const.BLACK_STR);
         
         while(!game.isGameFinished()) {
             game.applyAction(com[i].getNextAction(game));
-            //game.print();
+            i = (i == 0) ? 1 : 0;
+            if(game.checkPutable(game.getIntMove()) == 0) {
+                game.applyAction(Const.PASS_STR);
+                i = (i == 0) ? 1 : 0;
+            }
+        }
+        this.fitness += (game.getScore(move) - game.getScore(nmove));
+        
+        // 後攻
+        move = Const.WHITE;
+        nmove = Const.BLACK;
+        i = 1;
+        
+        game = new Othello();
+        game.checkPutable(Const.BLACK);
+        game.setMove(Const.BLACK_STR);
+        
+        while(!game.isGameFinished()) {
+            game.applyAction(com[i].getNextAction(game));
             i = (i == 0) ? 1 : 0;
             if(game.checkPutable(game.getIntMove()) == 0) {
                 game.applyAction(Const.PASS_STR);

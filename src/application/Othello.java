@@ -210,4 +210,16 @@ public class Othello {
         }
         return n;
     }
+    
+    public int getTurn() {
+        int n = 0;
+        for(int i=0; i<Const.BSIZE; i++) {
+            for(int j=0; j<Const.BSIZE; j++) {
+                if(board[i][j] == Const.SPACE || board[i][j] == Const.PUTABLE)
+                    continue;
+                n++;
+            }
+        }
+        return n - 4;
+    }
 }

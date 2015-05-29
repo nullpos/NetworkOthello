@@ -11,11 +11,14 @@ import util.QSort;
 
 public class Main {
     public static void main(String[] args) {
-        int max_generation = 10; // 最大世代数
+        int max_generation = 30; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
-        int sel_num = 2; // そのまま次世代へ残す優秀な遺伝子の数
+        int sel_num = (int) (max_generation * 0.1); // そのまま次世代へ残す優秀な遺伝子の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
+        int[] mutate = {(int) (max_generation * 0.3), 6}; // 突然変異の方法
+        byte[][] teachers = Const.GENE_TEACHER[1];
+        
         Calendar now = Calendar.getInstance();
         String file_name = Const.GENE_DIR + 
                 ((now.get(Calendar.HOUR_OF_DAY) < 10) ? "0"+now.get(Calendar.HOUR_OF_DAY) : now.get(Calendar.HOUR_OF_DAY)) +"-"+ 
@@ -30,7 +33,8 @@ public class Main {
             e.printStackTrace();
             System.exit(-1);
         }
-        ps.println("gen:" + max_generation + " genes:" + gene_num + " selNum:" + sel_num + " chromoNum:" + chromo_num + " crossType:" + crossover_type);
+        ps.println("gen:" + max_generation + " genes:" + gene_num + " selNum:" + sel_num + 
+                " chromoNum:" + chromo_num + " crossType:" + crossover_type + " mutate:" + mutate[0] + "," + mutate[1]);
         
         Gene[] g = new Gene[gene_num];
         for(int i=0; i<gene_num; i++) {
@@ -38,13 +42,14 @@ public class Main {
             g[i].initRandom();
         }
         
-
-        byte[][] teachers = Const.TEACHERS01;
+        // 教師遺伝子を作成
+        
         Gene[] tg = new Gene[teachers.length];
         for(int i=0; i<teachers.length; i++) {
             tg[i] = new Gene(chromo_num);
             tg[i].setChromosome(teachers[i]);;
         }
+        //*/
         
         (new File(file_name)).delete();
         GA ga = new GA(g);
@@ -68,20 +73,21 @@ public class Main {
                     if(j == k) continue;
                     g[j].calcFitness(g[k]);
                 }
-                */
+                //*/
+                System.out.print(".");
             }
             
             // 出力
             QSort.sort(ga.gene);
-            System.out.println("  優秀fitness:"+ga.getElite().getFitness());
+            System.out.println("優秀fitness:"+ga.getElite().getFitness());
             ps.printf("---------- %02d 世代 ----------%n", i);
             ga.out(ps);
             
-            ga.select(sel_num);
+            ga.gene = ga.select(sel_num);
             ga.crossover(crossover_type);
-            ga.mutate(3, 4);
+            ga.mutate(mutate[0], mutate[1]);
         }
         long end = System.currentTimeMillis();
-        System.out.println("time: " + (end - start) + "ms");
+        System.out.println("time: " + ((end - start) / 1000) + "s");
     }
 }
