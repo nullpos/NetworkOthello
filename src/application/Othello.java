@@ -5,7 +5,6 @@ import util.Const;
 public class Othello {
     private String move = null;
     private int[][] board = new int[Const.BSIZE][Const.BSIZE];
-    private int[] opt = new int[Const.OPTSIZE];
     
     public Othello() {
         for(int i=0; i<Const.BSIZE; i++) {
@@ -13,6 +12,8 @@ public class Othello {
                 board[i][j] = Const.INIT_BOARD[i][j];
             }
         }
+        this.setMove(Const.BLACK_STR);
+        this.checkPutable(Const.BLACK);
     }
     
     public String whichIsWinner() {
@@ -173,9 +174,6 @@ public class Othello {
             }
         }
         o.move = this.move;
-        for(int i=0; i<Const.OPTSIZE; i++) {
-            o.opt[i] = this.opt[i];
-        }
         return o;
     }
     

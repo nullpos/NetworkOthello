@@ -259,7 +259,6 @@ public class Client extends JFrame implements MouseListener {
     public void playLocal(int level) {
         this.computer = new Computer(level);
         this.player.setMove(Const.BLACK_STR); // TODO
-        this.game.setMove(Const.BLACK_STR);
         
         if(this.player.getMove().equals(Const.BLACK_STR)) {
             bdisp.setText(player.getName());
@@ -273,7 +272,6 @@ public class Client extends JFrame implements MouseListener {
     }
     
     public void playServer() {
-        this.game.setMove(Const.BLACK_STR);
         this.updateDisp();
         this.sendMessage(Const.PLAYER_NAME_ID + player.getName());
         this.sendMessage(Const.OPTION_ID[0] + opt[0]);

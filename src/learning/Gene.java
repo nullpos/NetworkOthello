@@ -39,9 +39,6 @@ public class Gene extends AbstructGene {
         int nmove = Const.WHITE;
         int i = 0;
         
-        game.checkPutable(Const.BLACK);
-        game.setMove(Const.BLACK_STR);
-        
         while(!game.isGameFinished()) {
             game.applyAction(com[i].getNextAction(game));
             i = (i == 0) ? 1 : 0;
@@ -58,9 +55,6 @@ public class Gene extends AbstructGene {
         i = 1;
         
         game = new Othello();
-        game.checkPutable(Const.BLACK);
-        game.setMove(Const.BLACK_STR);
-        
         while(!game.isGameFinished()) {
             game.applyAction(com[i].getNextAction(game));
             i = (i == 0) ? 1 : 0;
