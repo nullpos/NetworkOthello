@@ -21,7 +21,7 @@ public class JPlayerDisp extends JPanel {
         this.canvas.setSize(120, tate);
         this.nameLabel = new JLabel(name);
         this.nameLabel.setSize(300, tate);
-        this.nameLabel.setFont(new Font("Arial", Font.PLAIN, 30));
+        this.nameLabel.setFont(new Font("メイリオ", Font.PLAIN, 30));
         this.scoreLabel = new JLabel();
         this.scoreLabel.setSize(100, tate);
         this.scoreLabel.setFont(new Font("Arial", Font.PLAIN, 30));
