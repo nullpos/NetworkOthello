@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         int max_generation = 50; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
-        int sel_num = (int) (max_generation * 0.1); // そのまま次世代へ残す優秀な遺伝子の数
+        int sel_num = (int) (max_generation * 0.2); // そのまま次世代へ残す優秀な遺伝子の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
         int[] mutate = {(int) (max_generation * 0.3), 6}; // 突然変異の方法
