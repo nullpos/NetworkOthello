@@ -11,13 +11,13 @@ import util.QSort;
 
 public class Main {
     public static void main(String[] args) {
-        int max_generation = 50; // 最大世代数
+        int max_generation = 30; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
-        int sel_num = (int) (max_generation * 0.2); // そのまま次世代へ残す優秀な遺伝子の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
-        int[] mutate = {(int) (max_generation * 0.3), 6}; // 突然変異の方法
-        byte[][] teachers = Const.GENE_TEACHER[3];
+        int sel_num = (int) (gene_num * 0.1); // ランダムでsel_num個の遺伝子を選び、複製した遺伝子列を作成する
+        int[] mutate = {(int) (gene_num * 0.5), 6}; // 突然変異の方法
+        byte[][] teachers = Const.GENE_TEACHER[4];
         
         Calendar now = Calendar.getInstance();
         String file_name = Const.GENE_DIR + 
@@ -47,13 +47,13 @@ public class Main {
         Gene[] tg = new Gene[teachers.length];
         for(int i=0; i<teachers.length; i++) {
             tg[i] = new Gene(chromo_num);
-            tg[i].setChromosome(teachers[i]);;
+            tg[i].setChromosome(teachers[i]);
         }
         //*/
         
         (new File(file_name)).delete();
         GA ga = new GA(g);
-        
+        double tmp = Double.NEGATIVE_INFINITY;
         long start = System.currentTimeMillis();
         for(int i=0; i<max_generation; i++) {
             // i世代目
@@ -61,11 +61,10 @@ public class Main {
             
             // 対戦
             for(int j=0; j<gene_num; j++) {
-                g[j].fitness = 0;
-                
+                ga.gene[j].fitness = 0;
                 // 固定された遺伝子と対戦する場合
                 for(int k=0; k<teachers.length; k++) {
-                    g[j].calcFitness(tg[k]);
+                    ga.gene[j].calcFitness(tg[k]);
                 }
                 /*/
                 // 遺伝子総当りの場合
@@ -77,15 +76,32 @@ public class Main {
             }
             
             // 出力
-            QSort.sort(ga.gene);
-            System.out.println("優秀fitness:"+ga.getElite().getFitness());
+            System.out.println("  最高適合度:"+ga.getElite().getFitness());
             ps.printf("---------- %02d 世代 ----------%n", i);
+            QSort.sort(ga.gene);
             ga.out(ps);
             
             ga.gene = ga.select(sel_num);
             ga.crossover(crossover_type);
             ga.mutate(mutate[0], mutate[1]);
+            
+            if(tmp > ga.getElite().getFitness()) {
+                System.err.println("Why smaaaaaaaal!!!!");
+                System.exit(-1);
+            }
+            tmp = ga.getElite().getFitness();
         }
+        
+        ps.println("---------- 最終世代 ----------");
+        Gene elite = ga.getElite();
+        ps.println(elite.getFitness());
+        ps.println(elite.toString());
+        ps.print("{"+elite.chromosome[0]);
+        for (int j = 1; j < elite.chromosome.length; j++) {
+            ps.print(", " + elite.chromosome[j]);
+        }
+        ps.println("}");
+        
         long end = System.currentTimeMillis();
         System.out.println("time: " + ((end - start) / 1000) + "s");
     }
