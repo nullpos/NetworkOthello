@@ -152,7 +152,7 @@ public class Computer {
         }
         
         value += (game.getScore(move) - game.getScore(nmove)) * g[index];
-        value += game.checkPutable(move) * g[index];
+        value += game.checkPutable(move) * g[index+1];
         return value;
     }
 }

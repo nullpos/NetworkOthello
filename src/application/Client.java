@@ -9,6 +9,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.net.*;
 import java.util.MissingResourceException;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.io.*;
@@ -235,13 +236,14 @@ public class Client extends JFrame implements MouseListener {
         this.bdisp.setTurn((game.getIntMove() == Const.BLACK));
         this.wdisp.setTurn((game.getIntMove() == Const.WHITE));
     }
-    public void acceptOperation(String action){    // プレイヤの操作を受付
+    public void acceptOperation(String action) {    // プレイヤの操作を受付
         if(!game.getMove().equals(player.getMove())) {
             System.out.println("not your turn");
             return;
         } else if(game.applyAction(action)) {
             if(computer == null ) sendMessage(action);
             if(Integer.parseInt(action) > 64) opt[0]--;
+            this.updateDisp();
             play();
         }
     }
@@ -258,7 +260,8 @@ public class Client extends JFrame implements MouseListener {
     
     public void playLocal(int level) {
         this.computer = new Computer(level);
-        this.player.setMove(Const.BLACK_STR); // TODO
+        Random r = new Random();
+        this.player.setMove((r.nextDouble() < 0.5) ? Const.BLACK_STR : Const.WHITE_STR);
         
         if(this.player.getMove().equals(Const.BLACK_STR)) {
             bdisp.setText(player.getName());
@@ -282,7 +285,6 @@ public class Client extends JFrame implements MouseListener {
         if(game.isGameFinished()) {
             String winner = game.whichIsWinner();
             System.out.println(winner + " is winner.");
-            this.updateDisp();
             if(winner.equals(Const.BLACK_STR)) {
                 this.bdisp.setTurn(true);
                 this.wdisp.setTurn(false);
@@ -293,11 +295,18 @@ public class Client extends JFrame implements MouseListener {
                 this.bdisp.setTurn(false);
                 this.wdisp.setTurn(false);
             }
+            this.updateDisp();
             return;
         } else {
             if (!game.getMove().equals(player.getMove())) {
                 if(!(computer == null)) {
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     game.applyAction(computer.getNextAction(game, (player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
+                    this.updateDisp();
                 }
             }
             // パスさせる
@@ -306,8 +315,6 @@ public class Client extends JFrame implements MouseListener {
                 play();
             }
         }
-        
-        this.updateDisp();
     }
 
     //マウスクリック時の処理
