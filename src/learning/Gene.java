@@ -37,11 +37,11 @@ public class Gene extends AbstructGene {
         // 先攻
         int move = Const.BLACK;
         int nmove = Const.WHITE;
-        int now = Const.BLACK;
+        int now = 0;
         
         while(!game.isGameFinished()) {
-            game.applyAction(com[now-1].getNextAction(game, now));
-            now = (now == Const.BLACK) ? Const.WHITE : Const.BLACK;
+            game.applyAction(com[now].getNextAction(game, (now == 0) ? move : nmove));
+            now = (now == 0) ? 1 : 0;
             if(game.checkPutable(game.getIntMove()) == 0) {
                 game.applyAction(Const.PASS_STR);
                 now = (now == 0) ? 1 : 0;
@@ -52,12 +52,12 @@ public class Gene extends AbstructGene {
         // 後攻
         move = Const.WHITE;
         nmove = Const.BLACK;
-        now = Const.WHITE;
+        now = 1;
         
         game = new Othello();
         while(!game.isGameFinished()) {
-            game.applyAction(com[now].getNextAction(game, now));
-            now = (now == Const.BLACK) ? Const.WHITE : Const.BLACK;
+            game.applyAction(com[now].getNextAction(game, (now == 0) ? move : nmove));
+            now = (now == 0) ? 1 : 0;
             if(game.checkPutable(game.getIntMove()) == 0) {
                 game.applyAction(Const.PASS_STR);
                 now = (now == 0) ? 1 : 0;

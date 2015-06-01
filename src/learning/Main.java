@@ -11,7 +11,7 @@ import util.QSort;
 
 public class Main {
     public static void main(String[] args) {
-        int max_generation = 80; // 最大世代数
+        int max_generation = 50; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
@@ -53,7 +53,6 @@ public class Main {
         
         (new File(genes_file_name)).delete();
         GA ga = new GA(g);
-        double tmp = Double.NEGATIVE_INFINITY;
         long start = System.currentTimeMillis();
         for(int i=0; i<max_generation; i++) {
             // i世代目
@@ -84,12 +83,6 @@ public class Main {
             ga.gene = ga.select(sel_num);
             ga.crossover(crossover_type);
             ga.mutate(mutate[0], mutate[1]);
-            
-            if(tmp > ga.getElite().getFitness()) {
-                System.err.println("Why smaaaaaaaal!!!!");
-                System.exit(-1);
-            }
-            tmp = ga.getElite().getFitness();
         }
         
         ps.println("---------- 最終世代 ----------");

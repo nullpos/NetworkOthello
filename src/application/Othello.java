@@ -48,7 +48,7 @@ public class Othello {
         Othello tmp = this.clone();
         int nmove = (this.getIntMove() == Const.BLACK) ? Const.WHITE : Const.BLACK;
         // 両者ともに置く場所がない
-        if(px[0] == 0 &&
+        if(pnum == 0 &&
                 tmp.checkPutable(nmove) == 0) {
             return true;
         } else {
