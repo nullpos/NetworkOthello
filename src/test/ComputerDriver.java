@@ -10,7 +10,7 @@ public class ComputerDriver {
         for (int i = 0; i < Const.LEVEL_DEPTH.length; i++) {
             Computer cpu = new Computer(i);
             System.out.println("レベル"+(i+1)+" evalの結果を表示:" + cpu.eval(game));
-            System.out.println("レベル"+(i+1)+" getNextActionの結果を表示:" + cpu.getNextAction(game));
+            System.out.println("レベル"+(i+1)+" getNextActionの結果を表示:" + cpu.getNextAction(game, Const.BLACK));
         }
     }
 }

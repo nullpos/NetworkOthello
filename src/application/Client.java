@@ -297,7 +297,7 @@ public class Client extends JFrame implements MouseListener {
         } else {
             if (!game.getMove().equals(player.getMove())) {
                 if(!(computer == null)) {
-                    game.applyAction(computer.getNextAction(game));
+                    game.applyAction(computer.getNextAction(game, (player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
                 }
             }
             // パスさせる

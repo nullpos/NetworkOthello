@@ -37,14 +37,14 @@ public class Gene extends AbstructGene {
         // 先攻
         int move = Const.BLACK;
         int nmove = Const.WHITE;
-        int i = 0;
+        int now = Const.BLACK;
         
         while(!game.isGameFinished()) {
-            game.applyAction(com[i].getNextAction(game));
-            i = (i == 0) ? 1 : 0;
+            game.applyAction(com[now-1].getNextAction(game, now));
+            now = (now == Const.BLACK) ? Const.WHITE : Const.BLACK;
             if(game.checkPutable(game.getIntMove()) == 0) {
                 game.applyAction(Const.PASS_STR);
-                i = (i == 0) ? 1 : 0;
+                now = (now == 0) ? 1 : 0;
             }
         }
         this.fitness += (game.getScore(move) - game.getScore(nmove));
@@ -52,15 +52,15 @@ public class Gene extends AbstructGene {
         // 後攻
         move = Const.WHITE;
         nmove = Const.BLACK;
-        i = 1;
+        now = Const.WHITE;
         
         game = new Othello();
         while(!game.isGameFinished()) {
-            game.applyAction(com[i].getNextAction(game));
-            i = (i == 0) ? 1 : 0;
+            game.applyAction(com[now].getNextAction(game, now));
+            now = (now == Const.BLACK) ? Const.WHITE : Const.BLACK;
             if(game.checkPutable(game.getIntMove()) == 0) {
                 game.applyAction(Const.PASS_STR);
-                i = (i == 0) ? 1 : 0;
+                now = (now == 0) ? 1 : 0;
             }
         }
         this.fitness += (game.getScore(move) - game.getScore(nmove));

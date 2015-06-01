@@ -20,8 +20,8 @@ public class Computer {
         }
     }
 
-    public String getNextAction(Othello game) {
-        Othello nextGame = search(game);
+    public String getNextAction(Othello game, int move) {
+        Othello nextGame = search(game, move);
 
         int[][] b = game.getBoard();
         int[][] nb = nextGame.getBoard();
@@ -39,7 +39,7 @@ public class Computer {
         return Const.PASS_STR;
     }
     
-    public Othello search(Othello game) {
+    public Othello search(Othello game, int move) {
         int[][] board = game.getBoard();
         int val = Integer.MIN_VALUE;
         Othello nextGame = game.clone();
@@ -61,7 +61,7 @@ public class Computer {
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
-            int v = minMax(o.clone(), Const.LEVEL_DEPTH[level]);
+            int v = minMax(o.clone(), move, Const.LEVEL_DEPTH[level]);
             
             if(v > val) {
                 val = v;
@@ -72,10 +72,10 @@ public class Computer {
         return nextGame;
     }
     
-    public int minMax(Othello game, int depth) {
+    public int minMax(Othello game, int move, int depth) {
         if(depth == 0) return eval(game);
         
-        boolean isMin = (depth % 2 == 0) ? true : false;
+        boolean isMin = (move == game.getIntMove()) ? false : true;
         int[][] board = game.getBoard();
         int val = (isMin) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 
@@ -97,7 +97,7 @@ public class Computer {
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
-            int v = minMax(o.clone(), depth-1);
+            int v = minMax(o.clone(), move, depth-1);
             
             if(isMin) {
                 if(v < val) {
