@@ -11,6 +11,13 @@ import util.QSort;
 
 public class Main {
     public static void main(String[] args) {
+        int argv = 1;
+        try {
+            argv = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            argv = 1;
+        }
+        
         int max_generation = 50; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
@@ -93,5 +100,10 @@ public class Main {
         
         long end = System.currentTimeMillis();
         System.out.println("time: " + ((end - start) / 1000) + "s");
+        
+        if (argv > 2) {
+            args[0] = Integer.toString(argv-1);
+            main(args);
+        }
     }
 }
