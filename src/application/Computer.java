@@ -23,16 +23,14 @@ public class Computer {
     public String getNextAction(Othello game, int move) {
         Othello nextGame = search(game, move);
 
-        int[][] b = game.getBoard();
         int[][] nb = nextGame.getBoard();
+        int[] px = game.getPx();
+        int[] py = game.getPy();
+        int p = game.getPnum();
         
-        for(int i=0; i<Const.BSIZE; i++) {
-            for(int j=0; j<Const.BSIZE; j++) {
-                if(b[i][j] != Const.PUTABLE) continue;
-                if(nb[i][j] == Const.BLACK || nb[i][j] == Const.WHITE) {
-                    //System.out.println("("+i+","+j+")");
-                    return Integer.toString(i * Const.BSIZE + j);
-                }
+        for(int i=0; i < p; i++) {
+            if(nb[px[i]][py[i]] == Const.BLACK || nb[px[i]][py[i]] == Const.WHITE) {
+                return Integer.toString(px[i] * Const.BSIZE + py[i]);
             }
         }
         
@@ -40,23 +38,13 @@ public class Computer {
     }
     
     public Othello search(Othello game, int move) {
-        int[][] board = game.getBoard();
         int val = Integer.MIN_VALUE;
         Othello nextGame = game.clone();
-
-        // おける場所を探す
-        int[] px = new int[Const.BSIZE * Const.BSIZE];
-        int[] py = new int[Const.BSIZE * Const.BSIZE];
-        int p = 0;
-        for(int i=0; i<Const.BSIZE; i++) {
-            for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.PUTABLE) {
-                    px[p] = i;
-                    py[p] = j;
-                    p++;
-                }
-            }
-        }
+        
+        int[] px = game.getPx();
+        int[] py = game.getPy();
+        int p = game.getPnum();
+        
         if(p == 0) return game;
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
@@ -76,22 +64,11 @@ public class Computer {
         if(depth == 0) return eval(game);
         
         boolean isMin = (move == game.getIntMove()) ? false : true;
-        int[][] board = game.getBoard();
         int val = (isMin) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-
-        // おける場所を探す
-        int[] px = new int[Const.BSIZE * Const.BSIZE];
-        int[] py = new int[Const.BSIZE * Const.BSIZE];
-        int p = 0;
-        for(int i=0; i<Const.BSIZE; i++) {
-            for(int j=0; j<Const.BSIZE; j++) {
-                if(board[i][j] == Const.PUTABLE) {
-                    px[p] = i;
-                    py[p] = j;
-                    p++;
-                }
-            }
-        }
+        
+        int[] px = game.getPx();
+        int[] py = game.getPy();
+        int p = game.getPnum();
         
         if(p == 0) return eval(game);
         for (int i = 0; i < p; i++) {

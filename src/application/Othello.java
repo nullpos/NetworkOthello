@@ -5,6 +5,9 @@ import util.Const;
 public class Othello {
     private String move = null;
     private int[][] board = new int[Const.BSIZE][Const.BSIZE];
+    private int[] px = new int[Const.BSIZE * Const.BSIZE];
+    private int[] py = new int[Const.BSIZE * Const.BSIZE];
+    private int pnum = 0;
     
     public Othello() {
         for(int i=0; i<Const.BSIZE; i++) {
@@ -43,15 +46,28 @@ public class Othello {
     
     public boolean isGameFinished() {
         Othello tmp = this.clone();
+        int nmove = (this.getIntMove() == Const.BLACK) ? Const.WHITE : Const.BLACK;
         // 両者ともに置く場所がない
-        if(tmp.checkPutable(Const.BLACK) == 0 &&
-                tmp.checkPutable(Const.WHITE) == 0) {
+        if(px[0] == 0 &&
+                tmp.checkPutable(nmove) == 0) {
             return true;
         } else {
             return false;
         }
     }
     
+    public int[] getPx() {
+        return px;
+    }
+
+    public int[] getPy() {
+        return py;
+    }
+
+    public int getPnum() {
+        return pnum;
+    }
+
     public String getMove() {
         return this.move;
     }
@@ -158,22 +174,32 @@ public class Othello {
             for(int j=0; j<Const.BSIZE; j++) {
                 if(board[i][j] == Const.PUTABLE || board[i][j] == Const.SPACE) {
                     board[i][j] = Const.SPACE;
-                    if(flip(move, i, j, false)) p++;
+                    if(flip(move, i, j, false)) {
+                        px[p] = i;
+                        py[p] = j;
+                        p++;
+                    }
                 }
             }
         }
+        pnum = p;
         return p;
     }
     
     public Othello clone() {
         Othello o = new Othello();
         int[][] b = o.getBoard();
+        int[] px = o.getPx();
+        int[] py = o.getPy();
         for(int i=0; i<Const.BSIZE; i++) {
             for(int j=0; j<Const.BSIZE; j++) {
                 b[i][j] = this.board[i][j];
+                px[i*Const.BSIZE + j] = this.px[i*Const.BSIZE + j];
+                py[i*Const.BSIZE + j] = this.py[i*Const.BSIZE + j];
             }
         }
         o.move = this.move;
+        o.pnum = this.pnum;
         return o;
     }
     
