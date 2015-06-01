@@ -128,9 +128,9 @@ public class Computer {
                     }
                     
                     if (move == Const.BLACK) {
-                        value -= g[Const.WEIGHT[i][j]];
+                        value -= g[index];
                     } else {
-                        value += g[Const.WEIGHT[i][j]];
+                        value += g[index];
                     }
                     break;
                     
