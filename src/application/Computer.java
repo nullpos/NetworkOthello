@@ -22,7 +22,8 @@ public class Computer {
 
     public String getNextAction(Othello game, int move) {
         Othello nextGame = search(game, move);
-
+        
+        // TODO 不動のコマ
         int[][] nb = nextGame.getBoard();
         int[] px = game.getPx();
         int[] py = game.getPy();

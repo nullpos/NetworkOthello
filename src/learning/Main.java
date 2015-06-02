@@ -24,7 +24,7 @@ public class Main {
         int crossover_type = 1; // 交叉の方法
         int sel_num = (int) (gene_num * 0.1); // ランダムでsel_num個の遺伝子を選び、複製した遺伝子列を作成する
         int[] mutate = {(int) (gene_num * 0.7), 6}; // 突然変異の方法
-        byte[][] teachers = Const.GENE_TEACHER[0];
+        byte[][] teachers = Const.GENE_TEACHER[1];
         
         Calendar now = Calendar.getInstance();
         String genes_file_name = Const.GENE_DIR + 
@@ -101,7 +101,7 @@ public class Main {
         long end = System.currentTimeMillis();
         System.out.println("time: " + ((end - start) / 1000) + "s");
         
-        if (argv > 2) {
+        if (argv > 1) {
             args[0] = Integer.toString(argv-1);
             main(args);
         }
