@@ -69,6 +69,7 @@ public class Client extends JFrame implements MouseListener {
                 int y = i * 45 + 100;
                 buttonArray[i][j].setBounds(x, y, 45, 45);//ボタンの大きさと位置を設定する．
                 buttonArray[i][j].addMouseListener(this);//マウス操作を認識できるようにする
+                buttonArray[i][j].setContentAreaFilled(false);
                 buttonArray[i][j].setActionCommand(Integer.toString(i*Const.BSIZE + j));//ボタンを識別するための名前(番号)を付加する
             }
         }
@@ -223,7 +224,7 @@ public class Client extends JFrame implements MouseListener {
                 if(board[i][j] == Const.WHITE){ buttonArray[i][j].setIcon(images.getWhiteIcon()); continue;}
                 if(board[i][j] == Const.PWHITE){ buttonArray[i][j].setIcon(images.getpWhiteIcon()); continue;}
                 if(board[i][j] == Const.SPACE){ buttonArray[i][j].setIcon(images.getBoardIcon()); continue;}
-                if(board[i][j] == Const.PUTABLE && opt[1] == Const.ON) {
+                if(board[i][j] == Const.PUTABLE && opt[1] == Const.ON && game.getMove().equals(player.getMove())) {
                     buttonArray[i][j].setIcon(images.getPutableIcon()); continue;
                 } else {
                     buttonArray[i][j].setIcon(images.getBoardIcon()); continue;
@@ -285,6 +286,7 @@ public class Client extends JFrame implements MouseListener {
         if(game.isGameFinished()) {
             String winner = game.whichIsWinner();
             System.out.println(winner + " is winner.");
+            this.updateDisp();
             if(winner.equals(Const.BLACK_STR)) {
                 this.bdisp.setTurn(true);
                 this.wdisp.setTurn(false);
@@ -295,7 +297,6 @@ public class Client extends JFrame implements MouseListener {
                 this.bdisp.setTurn(false);
                 this.wdisp.setTurn(false);
             }
-            this.updateDisp();
             return;
         } else {
             if (!game.getMove().equals(player.getMove())) {
@@ -306,7 +307,6 @@ public class Client extends JFrame implements MouseListener {
                         e.printStackTrace();
                     }
                     game.applyAction(computer.getNextAction(game, (player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
-                    this.updateDisp();
                 }
             }
             // パスさせる
@@ -315,6 +315,7 @@ public class Client extends JFrame implements MouseListener {
                 play();
             }
         }
+        this.updateDisp();
     }
 
     //マウスクリック時の処理
