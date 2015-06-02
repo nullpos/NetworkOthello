@@ -71,32 +71,32 @@ public class Const {
     };
     
     // 盤面の設定
-    private static final int $ = Const.SPACE;
+    private static final int s = Const.SPACE;
     private static final int b = Const.BLACK;
     private static final int w = Const.WHITE;
-    //private static final int B = Const.PBLACK;
+    private static final int B = Const.PBLACK;
     private static final int W = Const.PWHITE;
     //private static final int O = Const.PUTABLE;
 
-    public static final int[][] INIT_BOARD = {
-        {$, $, $, $, $, $, $, $},
-        {$, $, $, $, $, $, $, $},
-        {$, $, $, $, $, $, $, $},
-        {$, $, $, b, w, $, $, $},
-        {$, $, $, w, b, $, $, $},
-        {$, $, $, $, $, $, $, $},
-        {$, $, $, $, $, $, $, $},
-        {$, $, $, $, $, $, $, $}
-    };
     public static final int[][] INIT_BOARD2 = {
-        {w, w, w, b, W, $, b, w},
-        {b, w, b, b, b, w, b, w},
-        {b, w, w, b, w, b, w, w},
-        {b, w, b, b, w, w, w, w},
-        {b, w, b, b, w, b, w, $},
-        {b, w, b, w, b, w, w, w},
-        {b, b, w, b, b, b, w, w},
-        {b, b, b, b, b, w, w, w}
+        {s, s, s, s, s, s, s, s},
+        {s, s, s, s, s, s, s, s},
+        {s, s, s, s, s, s, s, s},
+        {s, s, s, b, w, s, s, s},
+        {s, s, s, w, b, s, s, s},
+        {s, s, s, s, s, s, s, s},
+        {s, s, s, s, s, s, s, s},
+        {s, s, s, s, s, s, s, s}
+    };
+    public static final int[][] INIT_BOARD = {
+        {s, s, s, s, w, s, b, w},
+        {s, s, b, b, b, w, b, w},
+        {s, w, w, b, w, b, w, w},
+        {w, s, b, b, W, w, w, w},
+        {b, b, b, b, w, b, w, s},
+        {s, w, b, w, b, w, w, w},
+        {s, s, w, b, b, b, w, s},
+        {s, s, w, w, w, s, s, s}
     };
     
     // サーバー関連
