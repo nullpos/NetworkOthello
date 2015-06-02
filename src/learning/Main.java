@@ -18,7 +18,7 @@ public class Main {
             argv = 1;
         }
         
-        int max_generation = 50; // 最大世代数
+        int max_generation = 70; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
         int crossover_type = 1; // 交叉の方法
