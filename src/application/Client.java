@@ -358,7 +358,9 @@ public class Client extends JFrame implements MouseListener {
         //ログイン処理
         String myName = JOptionPane.showInputDialog(null,"Enter your name.","login",JOptionPane.QUESTION_MESSAGE);
         if(myName.equals("")){
-            myName = "No name";//名前がないときは，"No name"とする
+            Random r = new Random();
+            int n = (int) (r.nextDouble() * 100);
+            myName = "User " + n;// 名前がないときはデフォルトネームにする
         }
         Player player = new Player(); //プレイヤオブジェクトの用意(ログイン)
         player.setName(myName); //名前を受付
