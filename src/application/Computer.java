@@ -69,7 +69,7 @@ public class Computer extends Thread {
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
-            int v = minMax(o.clone(), move, Const.LEVEL_DEPTH[level]);
+            int v = minMax(o.clone(), move, Const.LEVEL_DEPTH[level], val);
             
             if(v > val) {
                 val = v;
@@ -77,11 +77,21 @@ public class Computer extends Thread {
             }
         }
         
+        for (int j = 0; j < Const.LEVEL_DEPTH[level] + 1; j++) {
+            System.out.print("  ");
+        }
+        System.out.println(Const.LEVEL_DEPTH[level] + 1 + ":" + val);
+        
         return nextGame;
     }
-    
-    public int minMax(Othello game, int move, int depth) {
-        if(depth == 0) return eval(game);
+    // TODO alpha-beta
+    // TODO 完全読み、勝利読み
+    public int minMax(Othello game, int move, int depth, int cut) {
+        if(depth == 0) {
+            int e = eval(game);
+            System.out.println(depth + ":" + e);
+            return e;
+        }
         
         boolean isMin = (move == game.getIntMove()) ? false : true;
         int val = (isMin) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
@@ -90,20 +100,45 @@ public class Computer extends Thread {
         int[] py = game.getPy();
         int p = game.getPnum();
         
-        if(p == 0) return eval(game);
+        if(p == 0) {
+            Othello o = game.clone();
+            o.applyAction(Const.PASS_STR);
+            int v = minMax(o.clone(), move, depth-1, cut);
+            for (int j = 0; j < depth; j++) {
+                System.out.print("  ");
+            }
+            System.out.println(depth + ":" + v);
+            return v;
+        }
+        
         for (int i = 0; i < p; i++) {
             Othello o = game.clone();
             o.applyAction(Integer.toString(px[i] * Const.BSIZE + py[i]));
-            int v = minMax(o.clone(), move, depth-1);
+            int v = minMax(o.clone(), move, depth-1, val);
+            
+            for (int j = 0; j < depth; j++) {
+                System.out.print("  ");
+            }
+            System.out.println(depth + ":" + v);
             
             if(isMin) {
                 if(v < val) {
                     val = v;
                 }
+                /*
+                if(cut < v) {
+                    return v;
+                }
+                //*/
             } else {
                 if(v > val) {
                     val = v;
                 }
+                /*
+                if(cut > v) {
+                    return v;
+                }
+                //*/
             }
         }
         return val;
