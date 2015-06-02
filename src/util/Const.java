@@ -103,7 +103,7 @@ public class Const {
     private static final int W = Const.PWHITE;
     //private static final int O = Const.PUTABLE;
 
-    public static final int[][] INIT_BOARD2 = {
+    public static final int[][] INIT_BOARD = {
         {s, s, s, s, s, s, s, s},
         {s, s, s, s, s, s, s, s},
         {s, s, s, s, s, s, s, s},
@@ -113,7 +113,7 @@ public class Const {
         {s, s, s, s, s, s, s, s},
         {s, s, s, s, s, s, s, s}
     };
-    public static final int[][] INIT_BOARD = {
+    public static final int[][] INIT_BOARD1 = {
         {s, s, s, s, w, s, b, w},
         {s, s, b, b, b, w, b, w},
         {s, w, w, b, w, b, w, w},

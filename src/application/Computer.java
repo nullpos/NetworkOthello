@@ -2,12 +2,14 @@ package application;
 
 import util.Const;
 
-public class Computer {
+public class Computer extends Thread {
     private int level;
     private byte[] g = new byte[Const.CHROMO_NUM];
+    private Client client = null;
     
-    public Computer(int n) {
+    public Computer(int n, Client client) {
         level = n;
+        this.client = client;
         for(int i=0; i<g.length; i++) {
             g[i] = Const.GENE_ANS[n][i];
         }
@@ -19,7 +21,24 @@ public class Computer {
             g[i] = chromosome[i];
         }
     }
-
+    
+    public void run() {
+        Othello o;
+        Player p;
+        while (true) {
+            o = this.client.getGame();
+            p = this.client.getPlayer();
+            if(!(o.getMove().equals(p.getMove()))) {
+                this.client.receiveMessage(getNextAction(o, (p.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                
+            }
+        }
+    }
+    
     public String getNextAction(Othello game, int move) {
         Othello nextGame = search(game, move);
         

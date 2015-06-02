@@ -28,7 +28,15 @@ public class Client extends JFrame implements MouseListener {
     private JPlayerDisp wdisp;
     private int[] opt = {Const.OFF, Const.OFF};
     private Computer computer = null;
+    private Thread compThread;
     private OptWindow optwin;
+
+    public Player getPlayer() {
+        return player;
+    }
+    public Othello getGame() {
+        return game;
+    }
 
     /*
      *  コンストラクタ
@@ -260,7 +268,8 @@ public class Client extends JFrame implements MouseListener {
     }
     
     public void playLocal(int level) {
-        this.computer = new Computer(level);
+        this.computer = new Computer(level, this);
+        compThread = new Thread(computer);
         Random r = new Random();
         this.player.setMove((r.nextDouble() < 0.5) ? Const.BLACK_STR : Const.WHITE_STR);
         
@@ -271,6 +280,7 @@ public class Client extends JFrame implements MouseListener {
             bdisp.setText("Lv."+(level+1) + " Computer");
             wdisp.setText(player.getName());
         }
+        compThread.start();
         this.updateDisp();
         play();
     }
@@ -301,12 +311,7 @@ public class Client extends JFrame implements MouseListener {
         } else {
             if (!game.getMove().equals(player.getMove())) {
                 if(!(computer == null)) {
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    game.applyAction(computer.getNextAction(game, (player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
+                    //game.applyAction(computer.getNextAction(game, (player.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
                 }
             }
             // パスさせる
