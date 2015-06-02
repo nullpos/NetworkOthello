@@ -307,6 +307,11 @@ public class Client extends JFrame implements MouseListener {
                 this.bdisp.setTurn(false);
                 this.wdisp.setTurn(false);
             }
+            try {
+                compThread.wait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         } else {
             if (!game.getMove().equals(player.getMove())) {

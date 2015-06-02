@@ -77,8 +77,6 @@ public class Computer extends Thread {
             }
         }
         
-        System.out.println(Const.LEVEL_DEPTH[level] + 1 + ":" + val);
-        
         return nextGame;
     }
     

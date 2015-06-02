@@ -83,6 +83,9 @@ public class Main {
             
             // 出力
             System.out.println("  最高適合度:"+ga.getElite().getFitness());
+            long t = System.currentTimeMillis();
+            System.out.println("  time: " + ((t - start) / 1000) + "s");
+            
             ps.printf("---------- %02d 世代 ----------%n", i);
             QSort.sort(ga.gene);
             ga.out(ps);
