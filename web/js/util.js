@@ -1,26 +1,26 @@
 
 function rgbToHex(r, g, b) {
-	return parseInt('0x' +
-		(function(n) {
-			return new Array(7 - n.length).join('0') + n;
-		})((r << 16 | g << 8 | b).toString(16))
-	, 16);
+  return parseInt('0x' +
+    (function(n) {
+      return new Array(7 - n.length).join('0') + n;
+    })((r << 16 | g << 8 | b).toString(16))
+  , 16);
 }
 
 function lrgb(i, c) {
-	var l = rgbTable.length;
-	return rgbTable[parseInt(parseFloat(i) / 255 * (l-1))][c] * 255;
+  var l = rgbTable.length;
+  return rgbTable[parseInt(parseFloat(i) / 255 * (l-1))][c] * 255;
 }
 
 var weight = [
-	[0, 1, 2, 3, 3, 2, 1, 0],
-	[1, 4, 5, 6, 6, 5, 4, 1],
-	[2, 5, 7, 8, 8, 7, 5, 2],
-	[3, 6, 8, 9, 9, 8, 6, 3],
-	[3, 6, 8, 9, 9, 8, 6, 3],
-	[2, 5, 7, 8, 8, 7, 5, 2],
-	[1, 4, 5, 6, 6, 5, 4, 1],
-	[0, 1, 2, 3, 3, 2, 1, 0]
+  [0, 1, 2, 3, 3, 2, 1, 0],
+  [1, 4, 5, 6, 6, 5, 4, 1],
+  [2, 5, 7, 8, 8, 7, 5, 2],
+  [3, 6, 8, 9, 9, 8, 6, 3],
+  [3, 6, 8, 9, 9, 8, 6, 3],
+  [2, 5, 7, 8, 8, 7, 5, 2],
+  [1, 4, 5, 6, 6, 5, 4, 1],
+  [0, 1, 2, 3, 3, 2, 1, 0]
 ];
 
 var rgbTable = [
