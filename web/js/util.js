@@ -9,7 +9,7 @@ function rgbToHex(r, g, b) {
 
 function lrgb(i, c) {
 	var l = rgbTable.length;
-	return rgbTable[parseInt(parseFloat(i) / 255 * l)][c] * 255;
+	return rgbTable[parseInt(parseFloat(i) / 255 * (l-1))][c] * 255;
 }
 
 var weight = [
