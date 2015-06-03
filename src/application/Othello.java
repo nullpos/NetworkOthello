@@ -133,12 +133,13 @@ public class Othello {
                 int dx = i;
                 int dy = j;
                 int nmove = (move == Const.BLACK) ? Const.WHITE : Const.BLACK;
+                int npmove = (move == Const.BLACK) ? Const.PWHITE : Const.PBLACK;
                 int x,y;
                 
                 x = nx + dx;
                 y = ny + dy;
                 if(x<0 || x>7 || y<0 || y>7) continue;
-                while(board[x][y] == nmove) {
+                while(board[x][y] == nmove || board[x][y] == npmove) {
                     x += dx;
                     y += dy;
                     if(x<0 || x>7 || y<0 || y>7) break;

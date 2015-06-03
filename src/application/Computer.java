@@ -1,14 +1,18 @@
 package application;
 
+import java.util.Random;
+
 import util.Const;
 
 public class Computer extends Thread {
     private int level;
     private byte[] g = new byte[Const.CHROMO_NUM];
     private Client client = null;
+    private int opt;
     
     public Computer(int n, Client client) {
         level = n;
+        opt = client.getOption()[0];
         this.client = client;
         for(int i=0; i<g.length; i++) {
             g[i] = Const.GENE_ANS[n][i];
@@ -42,7 +46,6 @@ public class Computer extends Thread {
     public String getNextAction(Othello game, int move) {
         Othello nextGame = search(game, move);
         
-        // TODO 不動のコマ
         int[][] nb = nextGame.getBoard();
         int[] px = game.getPx();
         int[] py = game.getPy();
@@ -50,7 +53,15 @@ public class Computer extends Thread {
         
         for(int i=0; i < p; i++) {
             if(nb[px[i]][py[i]] == Const.BLACK || nb[px[i]][py[i]] == Const.WHITE) {
-                return Integer.toString(px[i] * Const.BSIZE + py[i]);
+                int n = px[i] * Const.BSIZE + py[i];
+                if(opt == 1) {
+                    Random r = new Random();
+                    if(r.nextDouble() < 0.4) {
+                        n += 64;
+                        opt--;
+                    }
+                }
+                return Integer.toString(n);
             }
         }
         
