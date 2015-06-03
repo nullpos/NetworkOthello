@@ -77,7 +77,7 @@ function init() {
       var ty = 300;
       var textgeo = new THREE.TextGeometry(v,
         {size: 100, font: "helvetiker", weight: "bold", style: "normal"});
-      var textmate = new THREE.MeshLambertMaterial({color: 0x444444});
+      var textmate = new THREE.MeshLambertMaterial({color: 0xAAAAAA});
       var textmesh = new THREE.Mesh(textgeo, textmate);
       textmesh.position.x = tx;
       textmesh.position.y = ty;
