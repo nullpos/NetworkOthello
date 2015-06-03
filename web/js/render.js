@@ -1,21 +1,20 @@
-var data = {
-  data: [-125, 116, -98, 121, -117, -33, 76, 42, -122, -123, -100, 109,
-    117, 74, 42, 38, 2, -33, 60, -83, 23, 78, 76, -96,
-    111, 16, 116, -68, 24, -7, -11, 81, -27, 61, 40, -114
-  ]
-};
+function initRender() {
+  $("#slider").on("slide", function(e) {
+    data.num = e.value - 1;
+    $("#label").text("Generation : " + (data.num + 1));
+    updateMesh();
+    updatePager();
+  });
 
-$(init);
-
-function init() {
-
+  /* 3d */
   var renderer,
     scene = [],
-    geometry= [],
+    geometry = [],
     material = [],
     mesh = [],
     camera = [],
-    controls;
+    controls,
+    omesh = [];
 
   initRenderer();
   initScene();
@@ -23,7 +22,9 @@ function init() {
   initCamera();
 
   function initRenderer() {
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
     //renderer = new THREE.CanvasRenderer({ antialias: true });
     renderer.setClearColor(0xEEEEEE);
     renderer.setSize(window.innerWidth - 50,
@@ -51,66 +52,71 @@ function init() {
 
   function initMesh() {
     for (var v = 0; v < 3; v++) {
+      mesh[v] = new Array();
+      omesh[v] = new Array();
       for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j++) {
 
           /* cells */
-          var px = i * 50 - 200 + (v-1) * 500 + 25;
+          var px = i * 50 - 200 + (v - 1) * 500 + 25;
           var py = j * 50 - 200 + 25;
           var zi = v * 12 + weight[i][j];
-          var z = data.data[zi]+128;
+          var z = data.data[data.num][zi] + 128;
 
-          geometry[i] = new THREE.BoxGeometry(50, 50, z);
-          material[i] = new THREE.MeshLambertMaterial({
-              color: rgbToHex(lrgb(z, 'R'), lrgb(z, 'G'), lrgb(z, 'B'))
+          geometry[zi] = new THREE.BoxGeometry(50, 50, 1);
+          material[zi] = new THREE.MeshLambertMaterial({
+            color: rgbToHex(lrgb(z, 'R'), lrgb(z, 'G'), lrgb(z, 'B'))
           });
-          mesh[i] = new THREE.Mesh(geometry[i], material[i]);
-          mesh[i].position.x = px;
-          mesh[i].position.y = py;
-          mesh[i].position.z = z/2;
-          scene.add(mesh[i]);
+          mesh[v][i*8+j] = new THREE.Mesh(geometry[zi], material[zi]);
+          mesh[v][i*8+j].position.set(px, py, z / 2);
+          mesh[v][i*8+j].scale.z = z;
+          scene.add(mesh[v][i*8+j]);
         }
       }
 
       /* text */
       var tx = (v - 1) * 500 - 50;
       var ty = 300;
-      var textgeo = new THREE.TextGeometry(v,
-        {size: 100, font: "helvetiker", weight: "bold", style: "normal"});
-      var textmate = new THREE.MeshLambertMaterial({color: 0xAAAAAA});
+      var textgeo = new THREE.TextGeometry(v, {
+        size: 100,
+        font: "helvetiker",
+        weight: "bold",
+        style: "normal"
+      });
+      var textmate = new THREE.MeshLambertMaterial({
+        color: 0xAAAAAA
+      });
       var textmesh = new THREE.Mesh(textgeo, textmate);
-      textmesh.position.x = tx;
-      textmesh.position.y = ty;
-      textmesh.position.z = 0;
+      textmesh.position.set(tx, ty, 0);
       scene.add(textmesh);
 
       /* other */
       var geo = [],
-        mat = [],
-        mes = [];
+        mat = [];
       for (var i = 0; i < 2; i++) {
         var cx = (v - 1) * 500 - 100 + i * 200;
         var cy = -300;
         var czi = v * 12 + i;
-        var cz = data.data[czi]+128;
-        geo[i] = new THREE.BoxGeometry(200, 50, cz);
+        var cz = data.data[data.num][czi] + 128;
+        geo[i] = new THREE.BoxGeometry(200, 50, 1);
         mat[i] = new THREE.MeshLambertMaterial({
-            color: rgbToHex(lrgb(cz, 'R'), lrgb(cz, 'G'), lrgb(cz, 'B'))
+          color: rgbToHex(lrgb(cz, 'R'), lrgb(cz, 'G'), lrgb(cz, 'B'))
         });
-        mes[i] = new THREE.Mesh(geo[i], mat[i]);
-        mes[i].position.x = cx;
-        mes[i].position.y = cy;
-        mes[i].position.z = cz/2;
-        scene.add(mes[i]);
+        omesh[v][i] = new THREE.Mesh(geo[i], mat[i]);
+        omesh[v][i].position.set(cx, cy, cz / 2);
+        omesh[v][i].scale.z = cz;
+        scene.add(omesh[v][i]);
 
-        var text = (i == 0) ? "Score" : "Put" ;
+        var text = (i == 0) ? "Score" : "Put";
         var div = (i == 0) ? -70 : -30;
-        var ctextgeo = new THREE.TextGeometry(text,
-          {size: 40, font: "helvetiker", weight: "bold", style: "normal"});
+        var ctextgeo = new THREE.TextGeometry(text, {
+          size: 40,
+          font: "helvetiker",
+          weight: "bold",
+          style: "normal"
+        });
         var ctextmesh = new THREE.Mesh(ctextgeo, textmate);
-        ctextmesh.position.x = cx + div;
-        ctextmesh.position.y = cy - 100;
-        ctextmesh.position.z = 0;
+        ctextmesh.position.set(cx + div, cy - 100, 0);
         scene.add(ctextmesh);
       }
     }
@@ -118,12 +124,39 @@ function init() {
 
   function initCamera() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.set(0, 0, 1500);
-    camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
+    camera.position.set(0, -400, 1500);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     controls = new THREE.TrackballControls(camera, $("#view")[0]);
     scene.add(camera);
   }
 
+  function updateMesh() {
+    for (var v = 0; v < 3; v++) {
+      for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+          /* cells */
+          var zi = v * 12 + weight[i][j];
+          var gz = data.data[data.num][zi] + 128;
+          mesh[v][i*8+j].scale.z = gz;
+          mesh[v][i*8+j].position.z = gz / 2;
+          mesh[v][i*8+j].material.setValues({
+            color: rgbToHex(lrgb(gz, 'R'), lrgb(gz, 'G'), lrgb(gz, 'B'))
+          });
+        }
+      }
+
+      for (var i = 0; i < 2; i++) {
+        var czi = v * 12 + i;
+        var cz = data.data[data.num][czi] + 128;
+        omesh[v][i].scale.z = cz;
+        omesh[v][i].position.z = cz / 2;
+        omesh[v][i].material.setValues({
+          color: rgbToHex(lrgb(cz, 'R'), lrgb(cz, 'G'), lrgb(cz, 'B'))
+        });
+
+      }
+    }
+  }
 
   function render() {
     renderer.clear();

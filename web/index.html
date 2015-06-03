@@ -7,23 +7,25 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/fileinput.min.css">
   <link rel="stylesheet" type="text/css" href="css/default.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-slider.css">
 </head>
 
 <body>
-
   <input id="fileinput" type="file" class="file">
+  <p class="text-center lead" id="label">Generation: </p>
   <div id="view" style="float:left;"></div>
 
-  <div class="btn-toolbar col-md-2 col-md-offset-5" role="toolbar" aria-label="...">
-    <div class="btn-group" role="group" aria-label="...">
-      <button id="back-btn" type="button" class="btn btn-default">Back</button>
-    </div>
-    <div id="sel-btn" class="btn-group" role="group" aria-label="...">
-    </div>
-    <div class="btn-group" role="group" aria-label="...">
-      <button id="next-btn" type="button" class="btn btn-default">Next</button>
-    </div>
+  <nav>
+    <ul class="pager">
+      <li class="previous" id="prev"><a href="#"><span aria-hidden="true">&laquo;</span> Prev Generation</a></li>
+      <li class="next" id="next"><a href="#">Next Generation <span aria-hidden="true">&raquo;</span></a></li>
+    </ul>
+  </nav>
+
+  <div class="col-xs-2 col-xs-offset-5">
+    <input id="slider" data-slider-id='slider'>
   </div>
+
 
   <script src="js/jquery-2.1.4.min.js"></script>
   <script src="js/util.js"></script>
@@ -31,6 +33,7 @@
   <script src="js/TrackballControls.js"></script>
   <script src="js/fileinput.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-slider.js"></script>
   <script src="js/renderers/Projector.js"></script>
   <script src="js/renderers/CanvasRenderer.js"></script>
   <script src="js/fileEvent.js"></script>

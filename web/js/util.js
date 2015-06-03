@@ -1,3 +1,37 @@
+$(init);
+
+function init() {
+  /* slider */
+  $("#slider").slider({
+    min: 0,
+    max: 0,
+    value: 0,
+    enabled: false
+  });
+
+  $("#prev").on("click", function() {
+    var s = $("#slider");
+    s.slider("setValue", (s.slider("getValue", -1)));
+  });
+  $("#next").on("click", function() {
+    var s = $("#slider");
+    s.slider("setValue", (s.slider("getValue", +1)));
+  });
+  updatePager();
+}
+
+function updatePager() {
+  if(data.num == 0) {
+    $("#prev").addClass("disabled");
+  } else {
+    $("#prev").removeClass("disabled");
+  }
+  if(data.num == data.data.length) {
+    $("#next").addClass("disabled");
+  } else {
+    $("#next").removeClass("disabled");
+  }
+}
 
 function rgbToHex(r, g, b) {
   return parseInt('0x' +
@@ -12,6 +46,11 @@ function lrgb(i, c) {
   return rgbTable[parseInt(parseFloat(i) / 255 * (l-1))][c] * 255;
 }
 
+var data = {
+  num: 0,
+  data: []
+};
+
 var weight = [
   [0, 1, 2, 3, 3, 2, 1, 0],
   [1, 4, 5, 6, 6, 5, 4, 1],
@@ -24,7 +63,7 @@ var weight = [
 ];
 
 var rgbTable = [
-  ,{ R:0 ,G:0 ,B:0.99999 }
+  { R:0 ,G:0 ,B:0.99999 }
   ,{ R:0 ,G:0.0796 ,B:0.99998 }
   ,{ R:0 ,G:0.1586 ,B:0.99998 }
   ,{ R:0 ,G:0.2358 ,B:0.99998 }
