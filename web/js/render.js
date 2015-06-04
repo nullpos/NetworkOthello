@@ -7,12 +7,15 @@ function initRender() {
     mesh = [],
     camera = [],
     controls,
-    omesh = [];
+    omesh = [],
+    gui,
+    values = new Values();
 
   initRenderer();
   initScene();
   initMesh();
   initCamera();
+  initGUI();
 
   function initRenderer() {
     renderer = new THREE.WebGLRenderer({
@@ -149,6 +152,38 @@ function initRender() {
 
       }
     }
+  }
+
+  function updateCamera(flag) {
+    if(flag == 1) {
+      camera.position.z *= -1;
+    } else {
+      v = (new Function("return " + values.camera))();
+      if(!v) return;
+      var pos = v.position;
+      var look = v.look;
+      controls.reset();
+      camera.position.set(pos.x, pos.y, pos.z);
+      controls.target.set(look.x, look.y, look.z);
+    }
+  }
+
+  function Values() {
+    this.camera = "{position: {x:0, y:-400, z:1500}, look: {x:0,y:0,z:0}}";
+    this.back = function() {
+      updateCamera(1);
+    }
+  }
+  function initGUI() {
+    gui = new dat.GUI({autoPlace: false});
+    $("#gui").append(gui.domElement);
+    gui.add(values, 'camera', {
+      initial: "{position: {x:0, y:-400, z:1500}, look: {x:0,y:0,z:0}}",
+      "set 0": "{position: {x:-500, y:0, z:1500}, look: {x:-500,y:0,z:0}}",
+      "set 1": "{position: {x:0, y:0, z:1500}, look: {x:0,y:0,z:0}}",
+      "set 2": "{position: {x:500, y:0, z:1500}, look: {x:500,y:0,z:0}}"
+    }).onChange(updateCamera);
+    gui.add(values, 'back');
   }
 
   function render() {

@@ -18,13 +18,20 @@
     <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
   </button>
 
-  <div id="view" style="float:left;"></div>
+  <div id="content" style="float:left;">
+    <div id="view"></div>
+    <div id="gui"></div>
+  </div>
 
   <nav>
     <ul class="pager">
-      <li class="previous" id="prev"><a href="#"><span aria-hidden="true">&laquo;</span> Prev Generation</a></li>
+      <li class="previous" id="prev">
+        <a href="#">
+          <span aria-hidden="true">&laquo;</span> Prev Generation</a>
+      </li>
       <li class="next" id="next"><a href="#">Next Generation <span aria-hidden="true">&raquo;</span></a></li>
     </ul>
+
   </nav>
 
   <div class="col-xs-2 col-xs-offset-5">
@@ -33,6 +40,7 @@
 
 
   <script src="js/jquery-2.1.4.min.js"></script>
+  <script src="js/dat.gui.min.js"></script>
   <script src="js/util.js"></script>
   <script src="js/three.min.js"></script>
   <script src="js/TrackballControls.js"></script>

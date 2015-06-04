@@ -21,7 +21,7 @@
       }
       data.num = 0;
 
-      $("autobtn").removeAttr("disabled");
+      $("#autobtn").removeAttr("disabled");
       $("#slider").slider({
         min: 1, max: data.data.length, value: 1,
         enabled: true, tooltip: 'always'
