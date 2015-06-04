@@ -1,7 +1,26 @@
 function initRender() {
-  $("#slider").on("slide", function(e) {
-    data.num = e.value - 1;
+  $("#slider").slider().on('change', function(e) {
+    data.num = e.value.newValue - 1;
     $("#label").text("Generation : " + (data.num + 1));
+    updateMesh();
+    updatePager();
+  });
+
+  $("#prev").on("click", function() {
+    var s = $("#slider").slider();
+    var n = s.slider("getValue");
+    s.slider("setValue", n-1);
+    data.num -= 1;
+    $("#label").text("Generation : " + (n-1));
+    updateMesh();
+    updatePager();
+  });
+  $("#next").on("click", function() {
+    var s = $("#slider").slider();
+    var n = s.slider("getValue");
+    s.slider("setValue", n+1);
+    data.num += 1;
+    $("#label").text("Generation : " + (n+1));
     updateMesh();
     updatePager();
   });
@@ -69,7 +88,7 @@ function initRender() {
           });
           mesh[v][i*8+j] = new THREE.Mesh(geometry[zi], material[zi]);
           mesh[v][i*8+j].position.set(px, py, z / 2);
-          mesh[v][i*8+j].scale.z = z;
+          mesh[v][i*8+j].scale.z = (z == 0) ? 1 : z;
           scene.add(mesh[v][i*8+j]);
         }
       }
@@ -104,7 +123,7 @@ function initRender() {
         });
         omesh[v][i] = new THREE.Mesh(geo[i], mat[i]);
         omesh[v][i].position.set(cx, cy, cz / 2);
-        omesh[v][i].scale.z = cz;
+        omesh[v][i].scale.z = (cz == 0) ? 1 : cz;
         scene.add(omesh[v][i]);
 
         var text = (i == 0) ? "Score" : "Put";

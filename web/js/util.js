@@ -1,24 +1,5 @@
 $(init);
 
-function init() {
-  /* slider */
-  $("#slider").slider({
-    min: 0,
-    max: 0,
-    value: 0,
-    enabled: false
-  });
-
-  $("#prev").on("click", function() {
-    var s = $("#slider");
-    s.slider("setValue", (s.slider("getValue", -1)));
-  });
-  $("#next").on("click", function() {
-    var s = $("#slider");
-    s.slider("setValue", (s.slider("getValue", +1)));
-  });
-  updatePager();
-}
 
 function updatePager() {
   if(data.num == 0) {
@@ -26,11 +7,23 @@ function updatePager() {
   } else {
     $("#prev").removeClass("disabled");
   }
-  if(data.num == data.data.length) {
+  if(data.num >= data.data.length-1) {
     $("#next").addClass("disabled");
   } else {
     $("#next").removeClass("disabled");
   }
+}
+
+function init() {
+  /* slider */
+  $("#slider").slider({
+    min: 0,
+    max: 0,
+    value: 0,
+    enabled: false,
+    id: "slider"
+  });
+  updatePager();
 }
 
 function rgbToHex(r, g, b) {
