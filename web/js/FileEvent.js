@@ -26,7 +26,11 @@
       });
 
       updatePager();
-      initRender();
+      if($("#view").child("canvas")) {
+        updateMesh();
+      } else {
+        initRender();
+      }
     };
     reader.readAsText(file, "utf-8");
   });

@@ -18,12 +18,12 @@ public class Main {
             argv = 1;
         }
         
-        int max_generation = 70; // 最大世代数
+        int max_generation = 100; // 最大世代数
         int gene_num = Const.GENE_NUM; // 遺伝子集団の数
         int chromo_num = Const.CHROMO_NUM; // chromosomeの数
-        int crossover_type = 1; // 交叉の方法
+        int crossover_type = 0; // 交叉の方法
         int sel_num = (int) (gene_num * 0.1); // ランダムでsel_num個の遺伝子を選び、複製した遺伝子列を作成する
-        int[] mutate = {(int) (gene_num * 0.7), 6}; // 突然変異の方法
+        int[] mutate = {(int) (gene_num * 0.7), (int) (chromo_num * 0.1)}; // 突然変異の方法
         byte[][] teachers = Const.GENE_TEACHER[1];
         
         Calendar now = Calendar.getInstance();

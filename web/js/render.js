@@ -1,30 +1,4 @@
 function initRender() {
-  $("#slider").slider().on('change', function(e) {
-    data.num = e.value.newValue - 1;
-    $("#label").text("Generation : " + (data.num + 1));
-    updateMesh();
-    updatePager();
-  });
-
-  $("#prev").on("click", function() {
-    var s = $("#slider").slider();
-    var n = s.slider("getValue");
-    s.slider("setValue", n-1);
-    data.num -= 1;
-    $("#label").text("Generation : " + (n-1));
-    updateMesh();
-    updatePager();
-  });
-  $("#next").on("click", function() {
-    var s = $("#slider").slider();
-    var n = s.slider("getValue");
-    s.slider("setValue", n+1);
-    data.num += 1;
-    $("#label").text("Generation : " + (n+1));
-    updateMesh();
-    updatePager();
-  });
-
   /* 3d */
   var renderer,
     scene = [],
@@ -149,7 +123,7 @@ function initRender() {
     scene.add(camera);
   }
 
-  function updateMesh() {
+  updateMesh = function() {
     for (var v = 0; v < 3; v++) {
       for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j++) {
