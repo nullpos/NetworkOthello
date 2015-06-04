@@ -97,7 +97,7 @@ function initRender() {
         });
         omesh[v][i] = new THREE.Mesh(geo[i], mat[i]);
         omesh[v][i].position.set(cx, cy, cz / 2);
-        omesh[v][i].scale.z = (cz == 0) ? 1 : cz;
+        omesh[v][i].scale.z = (cz <= 0) ? 1 : cz;
         scene.add(omesh[v][i]);
 
         var text = (i == 0) ? "Score" : "Put";
@@ -130,7 +130,7 @@ function initRender() {
           /* cells */
           var zi = v * 12 + weight[i][j];
           var gz = data.data[data.num][zi] + 128;
-          mesh[v][i*8+j].scale.z = gz;
+          mesh[v][i*8+j].scale.z = (gz <= 0) ? 1 : gz;
           mesh[v][i*8+j].position.z = gz / 2;
           mesh[v][i*8+j].material.setValues({
             color: rgbToHex(lrgb(gz, 'R'), lrgb(gz, 'G'), lrgb(gz, 'B'))
@@ -141,7 +141,7 @@ function initRender() {
       for (var i = 0; i < 2; i++) {
         var czi = v * 12 + i;
         var cz = data.data[data.num][czi] + 128;
-        omesh[v][i].scale.z = cz;
+        omesh[v][i].scale.z = (cz <= 0) ? 1 : cz;
         omesh[v][i].position.z = cz / 2;
         omesh[v][i].material.setValues({
           color: rgbToHex(lrgb(cz, 'R'), lrgb(cz, 'G'), lrgb(cz, 'B'))

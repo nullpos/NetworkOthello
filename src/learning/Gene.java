@@ -30,7 +30,7 @@ public class Gene extends AbstructGene {
     public void calcFitness(Gene g) {
         // 自分以外の相手を選んでリーグ対戦(先攻後攻？)
         // 終了時、fitnessに(自分の石の数-相手の石の数)を加算
-        int comLevel = 4;
+        int comLevel = 2;
         Othello game = new Othello();
         Computer[] com = { new Computer(comLevel, this.chromosome), new Computer(comLevel, g.chromosome) };
 

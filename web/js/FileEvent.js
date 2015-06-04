@@ -12,21 +12,25 @@
       var genes = parseInt(text[0].replace(/.*genes:(\d+) /, "$1"));
       for (var i = 0; i < generation; i++) {
         var line = text[2 + i*(genes + 1)];
+        var num = parseInt(line.replace(/.*\: (-?\d+)\.0.*/, "$1"));
         line = line.replace(/.*\{(.*)\}/, "$1")
           .split(", ")
           .map(function( num ){ return parseInt( num, 10 ) });
         data.data[i] = line;
+        data.fit[i] = num;
       }
       data.num = 0;
 
-      $("#label").text("Generation : " + (data.num+1));
+      $("autobtn").removeAttr("disabled");
       $("#slider").slider({
-        min: 1, max: data.data.length, value: 0,
+        min: 1, max: data.data.length, value: 1,
         enabled: true, tooltip: 'always'
       });
+      $("#slider").slider('setValue', 0);
 
+      updateGeneration(0);
       updatePager();
-      if($("#view").child("canvas")) {
+      if($("#view").children("canvas")) {
         updateMesh();
       } else {
         initRender();
