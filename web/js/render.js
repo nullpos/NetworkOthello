@@ -34,13 +34,13 @@ function initRender() {
   }
 
   function initScene() {
-    var light = new THREE.DirectionalLight(0xffffff);
-    light.position.set(100, 200, 300);
+    var lighta = new THREE.DirectionalLight(0xffffff);
+    var lightb = new THREE.DirectionalLight(0xffffff);
+    lighta.position.set(0, -300, 500);
+    lightb.position.set(0, 300, -500);
     scene = new THREE.Scene();
-    scene.add(light);
-
-    var axis = new THREE.AxisHelper(10000);
-    scene.add(axis);
+    scene.add(lighta);
+    scene.add(lightb);
   }
 
   function initMesh() {
