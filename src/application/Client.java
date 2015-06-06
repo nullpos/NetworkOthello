@@ -268,10 +268,10 @@ public class Client extends JFrame implements MouseListener {
     }
     
     public void playLocal(int level) {
-        this.computer = new Computer(level, this);
-        compThread = new Thread(computer);
         Random r = new Random();
         this.player.setMove((r.nextDouble() < 0.5) ? Const.BLACK_STR : Const.WHITE_STR);
+        this.computer = new Computer(level, this, (player.getMove().equals(Const.BLACK_STR) ? Const.WHITE_STR : Const.BLACK_STR ));
+        compThread = new Thread(computer);
         
         if(this.player.getMove().equals(Const.BLACK_STR)) {
             bdisp.setText(player.getName());
@@ -307,11 +307,7 @@ public class Client extends JFrame implements MouseListener {
                 this.bdisp.setTurn(false);
                 this.wdisp.setTurn(false);
             }
-            try {
-                compThread.wait();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            if(computer.isRunning())computer.stopRun();
             return;
         } else {
             if (!game.getMove().equals(player.getMove())) {

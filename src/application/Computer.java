@@ -9,14 +9,27 @@ public class Computer extends Thread {
     private byte[] g = new byte[Const.CHROMO_NUM];
     private Client client = null;
     private int opt;
-    
-    public Computer(int n, Client client) {
+    private boolean flag = true;
+    private String move;
+
+    public Computer(int n, Client client, String move) {
         level = n;
         opt = client.getOption()[0];
         this.client = client;
         for(int i=0; i<g.length; i++) {
             g[i] = Const.GENE_ANS[n][i];
         }
+        this.move = move;
+    }
+
+    public Computer(int n, Client client, byte[] chromosome, String move) {
+        level = n;
+        opt = Integer.MAX_VALUE;
+        this.client = client;
+        for(int i=0; i<g.length; i++) {
+            g[i] = chromosome[i];
+        }
+        this.move = move;
     }
     
     public Computer(int n, byte[] chromosome) {
@@ -28,19 +41,26 @@ public class Computer extends Thread {
     
     public void run() {
         Othello o;
-        Player p;
-        while (true) {
+        while (flag) {
             o = this.client.getGame();
-            p = this.client.getPlayer();
-            if(!(o.getMove().equals(p.getMove()))) {
-                this.client.receiveMessage(getNextAction(o, (p.getMove().equals(Const.BLACK_STR)) ? Const.WHITE : Const.BLACK));
+            if(o.getMove().equals(this.move)) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {}
+                String action = getNextAction(o, o.getIntMove());
+                this.client.receiveMessage(action);
             }
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
-                
-            }
+            } catch (InterruptedException e) {}
         }
+    }
+    
+    public void stopRun() {
+        flag = false;
+    }
+    public boolean isRunning() {
+        return flag;
     }
     
     public String getNextAction(Othello game, int move) {
