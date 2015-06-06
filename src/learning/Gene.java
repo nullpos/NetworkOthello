@@ -30,39 +30,27 @@ public class Gene extends AbstructGene {
     public void calcFitness(Gene g) {
         // 自分以外の相手を選んでリーグ対戦(先攻後攻？)
         // 終了時、fitnessに(自分の石の数-相手の石の数)を加算
-        int comLevel = 2;
-        Othello game = new Othello();
-        Computer[] com = { new Computer(comLevel, this.chromosome), new Computer(comLevel, g.chromosome) };
+        int comLevel = 0;
 
-        // 先攻
-        int move = Const.BLACK;
-        int nmove = Const.WHITE;
-        int now = 0;
-        
-        while(!game.isGameFinished()) {
-            game.applyAction(com[now].getNextAction(game, (now == 0) ? move : nmove));
-            now = (now == 0) ? 1 : 0;
-            if(game.checkPutable(game.getIntMove()) == 0) {
-                game.applyAction(Const.PASS_STR);
+        int[][] moves = {{Const.BLACK, Const.WHITE}, {Const.WHITE, Const.BLACK}};
+        for (int i = 0; i < 2; i++) {
+            Othello game = new Othello();
+            int now = i;
+            int move = moves[i][0];
+            int nmove = moves[i][1];
+            
+            Computer[] com = { new Computer(comLevel, this.chromosome), new Computer(comLevel, g.chromosome) };
+
+            while(!game.isGameFinished()) {
+                game.applyAction(com[now].getNextAction(game, (now == 0) ? move : nmove));
                 now = (now == 0) ? 1 : 0;
+                if(game.getPnum() == 0) {
+                    game.applyAction(Const.PASS_STR);
+                    now = (now == 0) ? 1 : 0;
+                }
             }
+            this.fitness += (game.getScore(move) - game.getScore(nmove));
         }
-        this.fitness += (game.getScore(move) - game.getScore(nmove));
         
-        // 後攻
-        move = Const.WHITE;
-        nmove = Const.BLACK;
-        now = 1;
-        
-        game = new Othello();
-        while(!game.isGameFinished()) {
-            game.applyAction(com[now].getNextAction(game, (now == 0) ? move : nmove));
-            now = (now == 0) ? 1 : 0;
-            if(game.checkPutable(game.getIntMove()) == 0) {
-                game.applyAction(Const.PASS_STR);
-                now = (now == 0) ? 1 : 0;
-            }
-        }
-        this.fitness += (game.getScore(move) - game.getScore(nmove));
     }
 }
