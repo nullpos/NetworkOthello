@@ -1,0 +1,22 @@
+body {
+  font-family: "Arial";
+  margin: auto;
+  position: relative;
+  padding: 20px;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+
+#content {
+  position: relative;
+}
+
+#gui {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+select {
+  color: #000000 !important;
+}
